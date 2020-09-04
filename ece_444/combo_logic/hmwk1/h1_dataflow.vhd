@@ -1,0 +1,33 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+
+entity h1_dataflow is 
+    Port
+    (
+        f3  : out std_logic;
+        f2  : out std_logic;
+        f1  : out std_logic;
+        f0  : out std_logic;
+        a   : in std_logic;
+        b   : in std_logic;
+        c   : in std_logic;
+        d   : in std_logic;
+    );
+end h1_dataflow;
+
+architecture dataflow of h1_dataflow is
+    begin
+        f3 <= (d and ((not c) or ((not a) and c))) 
+            or (a and ((not b) or (c and (not d))));
+        f2 <= (not b) 
+            or ((not a) and (not c) and d) 
+            or (a and c);
+        f1 <= (a and (not b) and (c xnor d)) 
+            or (b and (not d)) 
+            or ((not a) and d and (b or (not c)));
+        f0 <= ((not d) and (b xnor c)) 
+            or (a and ((not b) or (c and d))) 
+            or ((not a) and b and (not c) and d);
+
+end dataflow;
