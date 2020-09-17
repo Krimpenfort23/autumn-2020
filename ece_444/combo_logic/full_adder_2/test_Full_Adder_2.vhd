@@ -11,13 +11,14 @@ end;
 architecture test of test_Full_Adder_2 is
 
 component Full_Adder_2
-	port(
+	port
+	(
 		s		: out std_logic;
 		c_out	: out std_logic;
 		x		: in std_logic;
 		y		: in std_logic;
 		c_in	: in std_logic
-		);
+	);
 end component;
 
 signal input			: std_logic_vector(2 downto 0);
