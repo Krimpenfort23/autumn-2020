@@ -1,0 +1,170 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/User/Documents/College/Senior Year/autumn-2020/ece_444/combo_logic/hmwk1
+Eh1_behavior
+Z1 w1600318263
+Z2 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+Z3 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z4 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+R0
+Z5 8h1_behavior.vhd
+Z6 Fh1_behavior.vhd
+l0
+L5
+V0G74ZEIO5z2Vk0BRJT9OH0
+!s100 <dL;ID5`@4^DQTF]c;EAk2
+Z7 OV;C;10.4b;61
+32
+Z8 !s110 1600318267
+!i10b 1
+Z9 !s108 1600318267.000000
+Z10 !s90 -reportprogress|300|h1_behavior.vhd|
+Z11 !s107 h1_behavior.vhd|
+!i113 1
+Z12 tExplicit 1
+Abehavior
+R2
+R3
+R4
+DEx4 work 11 h1_behavior 0 22 0G74ZEIO5z2Vk0BRJT9OH0
+l23
+L19
+V:hU>T_ZC6<h4L4G]JOM=B3
+!s100 HlemPY^RL_DV@jUcQ_4Sf2
+R7
+32
+R8
+!i10b 1
+R9
+R10
+R11
+!i113 1
+R12
+Eh1_behavior_test
+Z13 w1600318216
+Z14 DPx4 ieee 16 std_logic_textio 0 22 V5TSK`;aJKC<l]CEg1>mz1
+R2
+R3
+R4
+R0
+Z15 8h1_behavior_test.vhd
+Z16 Fh1_behavior_test.vhd
+l0
+L8
+ViV`EhSzQ9_Mcz3T8l2f]D1
+!s100 6mzoHGj=41MA23:`C[E0Z2
+R7
+32
+R8
+!i10b 1
+R9
+Z17 !s90 -reportprogress|300|h1_behavior_test.vhd|
+Z18 !s107 h1_behavior_test.vhd|
+!i113 1
+R12
+Atest
+R14
+R2
+R3
+R4
+DEx4 work 16 h1_behavior_test 0 22 iV`EhSzQ9_Mcz3T8l2f]D1
+l31
+L11
+VOXo:UU`eV:=6g[C_oK]oV0
+!s100 jPYJioOKF_O6d[<WZhd5I2
+R7
+32
+R8
+!i10b 1
+R9
+R17
+R18
+!i113 1
+R12
+Eh1_dataflow
+Z19 w1600318331
+R2
+R3
+R4
+R0
+Z20 8h1_dataflow.vhd
+Z21 Fh1_dataflow.vhd
+l0
+L5
+VccM^k`zUG]dBS@DK=[1o>1
+!s100 Kh:>C<7<^`YUfPQ59OKnP3
+R7
+32
+Z22 !s110 1600318337
+!i10b 1
+Z23 !s108 1600318336.000000
+Z24 !s90 -reportprogress|300|h1_dataflow.vhd|
+Z25 !s107 h1_dataflow.vhd|
+!i113 1
+R12
+Adataflow
+R2
+R3
+R4
+DEx4 work 11 h1_dataflow 0 22 ccM^k`zUG]dBS@DK=[1o>1
+l20
+L19
+VBK7J9<8bc:HcTV8OD5]m21
+!s100 _a_6`fVfUmaABJPHeF0>`2
+R7
+32
+R22
+!i10b 1
+R23
+R24
+R25
+!i113 1
+R12
+Eh1_dataflow_test
+Z26 w1600318183
+R14
+R2
+R3
+R4
+R0
+Z27 8h1_dataflow_test.vhd
+Z28 Fh1_dataflow_test.vhd
+l0
+L8
+VhZbh5n[Q=nf`:dd<o24zh3
+!s100 1gPHafSZJYicbje3<ch970
+R7
+32
+R22
+!i10b 1
+Z29 !s108 1600318337.000000
+Z30 !s90 -reportprogress|300|h1_dataflow_test.vhd|
+Z31 !s107 h1_dataflow_test.vhd|
+!i113 1
+R12
+Atest
+R14
+R2
+R3
+R4
+Z32 DEx4 work 16 h1_dataflow_test 0 22 hZbh5n[Q=nf`:dd<o24zh3
+l31
+L11
+Z33 Vlk4Uh6B3[Kb5`o8T7BLgU1
+Z34 !s100 ]L>g6k1XIf5ZbY]Ta>g@`3
+R7
+32
+R22
+!i10b 1
+R29
+R30
+R31
+!i113 1
+R12

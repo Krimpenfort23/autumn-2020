@@ -13,7 +13,7 @@ vcom h1_behavior_test.vhd
 
 # initialize the simulation window and add waves to the simulation window
 vsim h1_behavior_test
-add wave sim:/test_full_adder_2/dev_to_test/*
+add wave sim:/h1_behavior_test/dev_to_test/*
 
 # define simulation time
 run 80 ns
