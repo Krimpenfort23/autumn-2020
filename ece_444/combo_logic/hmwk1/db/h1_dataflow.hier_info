@@ -1,0 +1,39 @@
+|h1_dataflow
+f3 << f3.DB_MAX_OUTPUT_PORT_TYPE
+f2 << f2.DB_MAX_OUTPUT_PORT_TYPE
+f1 << f1.DB_MAX_OUTPUT_PORT_TYPE
+f0 << f0.DB_MAX_OUTPUT_PORT_TYPE
+a => f3.IN0
+a => f3.IN0
+a => f3.IN0
+a => f2.IN0
+a => f1.IN0
+b => f1.IN1
+b => f1.IN1
+b => f0.IN0
+b => f3.IN1
+b => f2.IN1
+b => f0.IN0
+c => f3.IN1
+c => f3.IN1
+c => f1.IN1
+c => f1.IN0
+c => f0.IN1
+c => f3.IN0
+c => f2.IN1
+c => f1.IN1
+c => f0.IN1
+c => f0.IN1
+d => f3.IN1
+d => f3.IN1
+d => f2.IN1
+d => f1.IN1
+d => f1.IN1
+d => f1.IN1
+d => f0.IN1
+d => f3.IN1
+d => f1.IN1
+d => f0.IN1
+d => f0.IN1
+
+
