@@ -33,7 +33,7 @@ begin
             when "0001" =>
                 Result <= not B;
             when "0010" =>
-                Result <= std_logic_vector(A_int + B_int);
+                Result <= std_logic_vector(to_unsigned(A_int + B_int,Result'length));
             when "0011" =>
                 Result <= std_logic_vector(A_int - B_int);
             when "0100" =>
