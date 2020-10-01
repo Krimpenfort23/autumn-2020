@@ -18,47 +18,48 @@ entity Alu is
 end Alu;
 
 architecture behavior of Alu is
-signal A_int        :   integer := 0;
-signal B_int        :   integer := 0;
+signal A_inv		:	std_logic_vector(0 to bit_depth-1) := (others => '0');
+signal B_inv		:	std_logic_vector(0 to bit_depth-1) := (others => '0');
 
 begin
-	A_int <= to_integer(signed(A));
-	B_int <= to_integer(signed(B));
+	flip_process	: process(A, B, A_inv, B_inv)
+	begin
+		FlipA:
+		for i in 0 to bit_depth-1 loop
+			A_inv(i) <= A(i);
+		end loop;
+		FlipB:
+		for i in 0 to bit_depth-1 loop
+			B_inv(i) <= B(i);
+		end loop;
+	end process flip_process;
 
-    op_process : process(OpCode, A, B)
+    op_process : process(OpCode, A, B, A_inv, B_inv)
     begin
-        case OpCode is
-            when "0000" =>
+        case to_integer(unsigned(OpCode)) is
+            when 0 =>
                 Result <= not A;
-            when "0001" =>
+            when 1 =>
                 Result <= not B;
-            when "0010" =>
-                Result <= std_logic_vector(to_unsigned(A_int + B_int,Result'length));
-            when "0011" =>
-                Result <= std_logic_vector(A_int - B_int);
-            when "0100" =>
-                Result <= std_logic_vector(A_int sll 1);
-            when "0101" =>
-                Result <= std_logic_vector(A_int srl 2);
-            when "0110" =>
-                Result <= std_logic_vector(B_int sll 1);
-            when "0111" =>
-                Result <= std_logic_vector(B_int srl 2);
-            when "1000" =>
-                Flip:
-                for i in 0 to bit_depth-1 generate
-                    A(i) <= A(bit_depth-1-i);
-                end generate Flip;
-                result <= A;
-            when "1001" =>
-                Flip:
-                for i in 0 to bit_depth-1 generate
-                    B(i) <= B(bit_depth-1-i);
-                end generate Flip;
-                result <= B;
-            when "1010" =>
+            when 2 =>
+                Result <= std_logic_vector(signed(A) + signed(B));
+            when 3 =>
+                Result <= std_logic_vector(signed(A) - signed(B));
+            when 4 =>
+                Result <= std_logic_vector(signed(A) sll 1);
+            when 5 =>
+                Result <= std_logic_vector(signed(A) srl 2);
+            when 6 =>
+                Result <= std_logic_vector(signed(B) sll 1);
+            when 7 =>
+                Result <= std_logic_vector(signed(B) srl 2);
+            when 8 =>
+                result <= A_inv;
+            when 9 =>
+                result <= B_inv;
+            when 10 =>
                 Result <= A and B;
-            when "1011" =>
+            when 11 =>
                 Result <= A or B;
             when others =>
                 Error <= '1';

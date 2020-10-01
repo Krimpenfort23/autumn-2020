@@ -9,23 +9,84 @@ z2
 cModel Technology
 Z0 dC:/Users/User/Documents/College/Senior Year/autumn-2020/ece_444/combo_logic/hmwk2
 Ealu
-w1601522011
-DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
-DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
-DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+Z1 w1601537644
+Z2 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+Z3 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z4 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
 R0
-8Alu.vhd
-FAlu.vhd
+Z5 8Alu.vhd
+Z6 FAlu.vhd
 l0
 L5
 VNGe28PmcPY3i]TCzbUg6G0
 !s100 Zh>Gf3;_OKTKhjKl[nZH13
-OV;C;10.4b;61
+Z7 OV;C;10.4b;61
 32
-!s110 1601522013
+Z8 !s110 1601537696
 !i10b 1
-!s108 1601522013.000000
-!s90 -reportprogress|300|Alu.vhd|
-!s107 Alu.vhd|
+Z9 !s108 1601537696.000000
+Z10 !s90 -reportprogress|300|Alu.vhd|
+Z11 !s107 Alu.vhd|
 !i113 1
-tExplicit 1
+Z12 tExplicit 1
+Abehavior
+R2
+R3
+R4
+DEx4 work 3 alu 0 22 NGe28PmcPY3i]TCzbUg6G0
+l24
+L20
+ViIZIJNQe>Y_<^mFSUnAL10
+!s100 ld]]S6N3aiX`gVg<UR^ae2
+R7
+32
+R8
+!i10b 1
+R9
+R10
+R11
+!i113 1
+R12
+Etest_alu
+Z13 w1601537682
+Z14 DPx4 ieee 16 std_logic_textio 0 22 V5TSK`;aJKC<l]CEg1>mz1
+Z15 DPx4 ieee 9 math_real 0 22 Sk6CSihbPL<f[^Shm]=KX0
+R2
+R3
+R4
+R0
+Z16 8test_Alu.vhd
+Z17 Ftest_Alu.vhd
+l0
+L8
+VX8M?B2_9`ZGDhUe3ZUBE?3
+!s100 dDE`5]U<Q?7cco?B8eL4B0
+R7
+32
+R8
+!i10b 1
+R9
+Z18 !s90 -reportprogress|300|test_Alu.vhd|
+Z19 !s107 test_Alu.vhd|
+!i113 1
+R12
+Atest
+R14
+R15
+R2
+R3
+R4
+Z20 DEx4 work 8 test_alu 0 22 X8M?B2_9`ZGDhUe3ZUBE?3
+l41
+L11
+VM`iH^b5X4X<IP1QI_MOOR2
+!s100 9OP=C=@<hWKHD?2QH4@nl1
+R7
+32
+R8
+!i10b 1
+R9
+R18
+R19
+!i113 1
+R12

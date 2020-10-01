@@ -16,6 +16,6 @@ vsim test_Alu
 add wave sim:/test_Alu/dev_to_test/*
 
 # define simulation time
-run 80 ns
+run 1600 us
 # zoom out
 wave zoom full
