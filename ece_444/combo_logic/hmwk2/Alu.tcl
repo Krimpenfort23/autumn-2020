@@ -1,6 +1,6 @@
 transcript off
 # stop previous simulations
-quit -sim0
+quit -sim
 
 # select a directory for creation of the work directory
 cd {C:\Users\User\Documents\College\Senior Year\autumn-2020\ece_444\combo_logic\hmwk2}

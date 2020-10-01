@@ -1,4 +1,4 @@
-library library IEEE;
+library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
@@ -10,7 +10,7 @@ entity Alu is
     port
     (
         Result      :   out std_logic_vector(bit_depth-1 downto 0);
-        Error       :   out std_logic := 0;
+        Error       :   out std_logic := '0';
         A           :   in std_logic_vector(bit_depth-1 downto 0);
         B           :   in std_logic_vector(bit_depth-1 downto 0);
         OpCode      :   in std_logic_vector(3 downto 0)
@@ -21,9 +21,10 @@ architecture behavior of Alu is
 signal A_int        :   integer := 0;
 signal B_int        :   integer := 0;
 
-A_int = to_integer(signed(A));
-B_int = to_integer(signed(B));
 begin
+	A_int <= to_integer(signed(A));
+	B_int <= to_integer(signed(B));
+
     op_process : process(OpCode, A, B)
     begin
         case OpCode is
