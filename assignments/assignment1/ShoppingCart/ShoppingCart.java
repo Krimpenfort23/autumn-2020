@@ -43,9 +43,8 @@ public class ShoppingCart  {
 				PrintWriter out=new PrintWriter(outputstreamwriter);
 			   	Wallet wallet = new Wallet();
 			   	int balance = wallet.getBalance();
-				//Add your name after SS-LBS!!! 
-				out.println("Welcome to SS-LBS's ShoppingCart. The time now is " + (new Date()).toString());
-				out.println("Your balance: " + balance+ " credits");
+				out.println("Welcome to Evan Krimpenfort's ShoppingCart. The time now is " + (new Date()).toString());
+				out.println("Your balance: " + balance + " credits");
 				out.println("Please select your product: ");
 			    
 				for (Object element :Store.asString() ) {
@@ -58,7 +57,7 @@ public class ShoppingCart  {
 			    	int price = Store.getPrice(product);
 				
 				if(balance>=price){
-					wallet.setBalance(balance-price);
+					wallet.safeWithdraw(balance-price);	// REPLACED
 					Pocket pocket = new Pocket();
 					pocket.addProduct(product);
 					out.println("You have sucessfully purchased a '" + product + "'");
