@@ -6,7 +6,7 @@ entity Dff_compare is
     port
     (
         Q               : out std_logic;
-        Q_comb		      : out std_logic;
+        Q_combined      : out std_logic;
         D               : in std_logic;
         clk             : in std_logic;
         reset           : in std_logic
@@ -26,10 +26,6 @@ component Dff_1
 end component;
 
 component Dff_2
-	 generic
-	 (
-		  synch_reset		: boolean := true
-	 );
     port
     (
         Q       : out std_logic;
@@ -50,7 +46,7 @@ begin
     behavioral_dff  : Dff_2 
     generic map
     (
-        synch_reset
+        synch reset
     )
     port map 
     (

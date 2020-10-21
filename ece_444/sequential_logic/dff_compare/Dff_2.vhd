@@ -6,7 +6,7 @@ entity Dff_2 is
     generic
     (
         synch_reset     : boolean := true
-    );
+    )
     port
     (
         Q       : out std_logic;
@@ -19,7 +19,7 @@ end Dff_2;
 architecture behavior of Dff_2 is
 
 begin
-    synch : if synch_reset = true generate
+    synch   : if synch_reset = true generic
         Dff_process : process(clk)
         begin
             if (rising_edge(clk)) then
