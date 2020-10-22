@@ -9,7 +9,7 @@ z2
 cModel Technology
 Z0 dC:/Users/User/Documents/College/Senior Year/autumn-2020/ece_444/sequential_logic/hmwk3
 Ebarrel
-Z1 w1603329348
+Z1 w1603333918
 Z2 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
 Z3 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
 Z4 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
@@ -22,13 +22,13 @@ Vid4:HX__LAmGjKd29<lNb1
 !s100 ;[Ez=MOn[0:z<0dDi]PI>2
 Z7 OV;C;10.4b;61
 32
-!s110 1603329352
+Z8 !s110 1603333925
 !i10b 1
-Z8 !s108 1603329352.000000
-Z9 !s90 -reportprogress|300|Barrel.vhd|
-Z10 !s107 Barrel.vhd|
+Z9 !s108 1603333925.000000
+Z10 !s90 -reportprogress|300|Barrel.vhd|
+Z11 !s107 Barrel.vhd|
 !i113 1
-Z11 tExplicit 1
+Z12 tExplicit 1
 Abehavior
 R2
 R3
@@ -36,14 +36,100 @@ R4
 DEx4 work 6 barrel 0 22 id4:HX__LAmGjKd29<lNb1
 l27
 L22
-VnI]Ld;H]86Mj7YjP4DFW20
-!s100 =G18n7W;nBEC@]OU^gSD`1
+V0RbH:S2_Qc2HTe;bjo5l[2
+!s100 ;<C4V<e?^E2JSHgc[Q[Jh0
 R7
 32
-!s110 1603329353
-!i10b 1
 R8
+!i10b 1
 R9
 R10
-!i113 1
 R11
+!i113 1
+R12
+Psim_mem_init
+Z13 DPx4 ieee 16 std_logic_textio 0 22 V5TSK`;aJKC<l]CEg1>mz1
+R2
+R3
+R4
+Z14 w1603330016
+R0
+Z15 8sim_mem_init.vhd
+Z16 Fsim_mem_init.vhd
+l0
+L11
+Vh^VM6?MLGX:7lZKFS0lN72
+!s100 4:0L5Y8fgRoaAco03M<PJ2
+R7
+32
+b1
+R8
+!i10b 1
+R9
+Z17 !s90 -reportprogress|300|sim_mem_init.vhd|
+Z18 !s107 sim_mem_init.vhd|
+!i113 1
+R12
+Bbody
+Z19 DPx4 work 12 sim_mem_init 0 22 h^VM6?MLGX:7lZKFS0lN72
+R13
+R2
+R3
+R4
+l0
+L24
+VTjHEkoL><:1@c85iWZR]_3
+!s100 CI6TmhJYZNQ:JEJ2e9hhR1
+R7
+32
+R8
+!i10b 1
+R9
+R17
+R18
+!i113 1
+R12
+nbody
+Etest_barrel
+Z20 w1603331235
+R19
+R13
+R2
+R3
+R4
+R0
+Z21 8test_Barrel.vhd
+Z22 Ftest_Barrel.vhd
+l0
+L11
+VV1>CfF8_NEeCBCh5WjR<T3
+!s100 iXD;SBDmX=L1E35UUe`g:0
+R7
+32
+R8
+!i10b 1
+R9
+Z23 !s90 -reportprogress|300|test_Barrel.vhd|
+Z24 !s107 test_Barrel.vhd|
+!i113 1
+R12
+Atest
+R19
+R13
+R2
+R3
+R4
+Z25 DEx4 work 11 test_barrel 0 22 V1>CfF8_NEeCBCh5WjR<T3
+l46
+L14
+Z26 Vg@<826[U1DEO3V^ZK4:MH2
+Z27 !s100 d:hb:ZHGTTDW[ml]>[i;72
+R7
+32
+R8
+!i10b 1
+R9
+R23
+R24
+!i113 1
+R12

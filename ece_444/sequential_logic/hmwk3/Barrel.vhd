@@ -20,28 +20,22 @@ entity Barrel is
 end Barrel;
 
 architecture behavior of Barrel is
-signal right_shift  :   std_logic_vector(bit_depth-1 downto 0) := (others => 'X');
-signal left_shift   :   std_logic_vector(bit_depth-1 downto 0) := (others => 'X');
-signal reg          :   std_logic_vector(bit_depth-1 downto 0) := (others => 'X');
+signal right_shift  :   std_logic_vector(bit_depth-1 downto 0) := (others => '0');
+signal left_shift   :   std_logic_vector(bit_depth-1 downto 0) := (others => '0');
+signal reg          :   std_logic_vector(bit_depth-1 downto 0) := (others => '0');
 
 begin
+	Output <= reg;
+	
     shift_process: process(Input, Shift, Reset)
     begin
         if (Reset = '1') then
             -- no reset
-            if (Shift >= 0) then
-                -- shift both left and right by a length of shift
-                right_shift <= std_logic_vector(unsigned(reg) srl Shift);
-                left_shift <= std_logic_vector(unsigned(reg) sll Shift);
-            else
-                -- shift is wrong
-                right_shift <= (others => 'X');
-                left_shift <= (others => 'X');
-            end if;
+			right_shift <= std_logic_vector(unsigned(reg) srl Shift);
+			left_shift <= std_logic_vector(unsigned(reg) sll Shift);
         else
             -- resets the register and resets the Output
-            reg <= (others => 'X');
-            Output <= (others => 'X');
+            reg <= (others => '0');
         end if;
     end process shift_process;
 
@@ -49,30 +43,25 @@ begin
     begin 
         if (Reset = '0') then
             -- resets the register and resets the Output
-            reg <= (others => 'X');
-            Output <= (others => 'X');
+            reg <= (others => '0');
         elsif rising_edge(Clk) then
             -- no reset
             case Sel is
                 when "00" =>
                     -- hold
-                    Output <= reg;
+                    reg <= reg;
                 when "01" =>
                     -- shift right
-                    reg <= right_shift;
-                    Output <= reg;
+                    reg <= reg(shift-1 downto 0) & right_shift(bit_depth-shift-1 downto 0);
                 when "10" =>
                     -- shift left
-                    reg <= left_shift;
-                    Output <= reg;
+                    reg <= left_shift(bit_depth-1 downto shift) & reg(bit_depth-1 downto bit_depth-shift);
                 when "11" =>
                     -- load
                     reg <= Input;
-                    Output <= reg;
                 when others =>
                     -- When Select is wrong
                     reg <= (others => 'X');
-                    Output <= (others => 'X');
             end case;
         end if;
     end process s_process;

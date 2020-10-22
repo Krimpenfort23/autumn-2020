@@ -8,7 +8,7 @@ use ieee.std_logic_textio.all;
 
 use work.sim_mem_init.all;
 
-entity Barrel is 
+entity test_Barrel is 
 end;
 
 architecture test of test_Barrel is
@@ -45,15 +45,15 @@ file output_file        :   text;
 
 begin
     dev_to_test:    Barrel
-        generic(data_width)
+        generic map(data_width)
         port map(data_out, data_in, sel, shift, reset, clk);
     
     stimulus:   process
         variable input_line     : line;
         variable writeBuffer    : line;
-        variable in_char        : charcter;
-        variable in_slv         : std_logic_vector(9 downto 0);
-        variable out_slv        : std_logic_vector(9 downto 0);
+        variable in_char        : character;
+        variable in_slv         : std_logic_vector(7 downto 0);
+        variable out_slv        : std_logic_vector(7 downto 0);
         variable errorCount     : integer := 0;
 
         begin
@@ -65,7 +65,7 @@ begin
 
                 for i in 0 to 8 loop
                     read(input_line, in_char);
-                    in_slv := std_logic_vector(to_unsigned(character'pos(in_char), 10));
+                    in_slv := std_logic_vector(to_unsigned(character'pos(in_char), 8));
                     if (i = 3) then
                         data_in(7 downto 4) <= ASCII_to_hex(in_slv);
                     elsif (i = 4) then
@@ -73,7 +73,7 @@ begin
                     elsif (i = 6) then
                         sel <= in_slv(1 downto 0);
                     elsif (i = 8) then
-                        shift <= in_slv(1 downto 0);
+                        shift <= to_integer(unsigned(in_slv(1 downto 0)));
                     end if;
                 end loop;
 
@@ -84,7 +84,7 @@ begin
 
                 for i in 0 to 4 loop
                     read(input_line, in_char);
-                    out_slv := std_logic_vector(to_unsigned(character'pos(in_char), 10));
+                    out_slv := std_logic_vector(to_unsigned(character'pos(in_char), 8));
                     if (i = 3) then
                         expected(7 downto 4) <= ASCII_to_hex(out_slv);
                     elsif (i = 4) then
@@ -114,9 +114,9 @@ begin
             file_close(output_file);
 
             if (errorCount = 0) then
-                report "SUCCESS: Barrel Shift Test Completed."
+                report "SUCCESS: Barrel Shift Test Completed.";
             else
                 report "The Barrel Shifter is Broken." severity warning;
-            end if;'
+            end if;
     end process stimulus;
 end test;

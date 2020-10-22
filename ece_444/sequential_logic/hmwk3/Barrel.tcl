@@ -8,6 +8,7 @@ vlib work
 vmap work work
 
 # compile the program and test-bench files
+vcom sim_mem_init.vhd
 vcom Barrel.vhd
 vcom test_Barrel.vhd
 
@@ -16,6 +17,6 @@ vsim test_Barrel
 add wave sim:/test_Barrel/dev_to_test/*
 
 # define simulation time
-run 500 us
+run 820 ns
 # zoom out
 wave zoom full
