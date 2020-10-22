@@ -31,21 +31,21 @@ begin
             -- no reset
             if (Shift >= 0) then
                 -- shift both left and right by a length of shift
-                right_shift <= reg srl Shift;
-                left_shift <= reg sll Shift;
+                right_shift <= std_logic_vector(unsigned(reg) srl Shift);
+                left_shift <= std_logic_vector(unsigned(reg) sll Shift);
             else
                 -- shift is wrong
                 right_shift <= (others => 'X');
                 left_shift <= (others => 'X');
-            end if
+            end if;
         else
             -- resets the register and resets the Output
             reg <= (others => 'X');
             Output <= (others => 'X');
-        end if
+        end if;
     end process shift_process;
 
-    s_process: process(Clk, Input, Sel, right_shift, left_shift, Output, Reset)
+    s_process: process(Clk, Input, Sel, right_shift, left_shift, Reset)
     begin 
         if (Reset = '0') then
             -- resets the register and resets the Output
@@ -54,18 +54,18 @@ begin
         elsif rising_edge(Clk) then
             -- no reset
             case Sel is
-                when '00' =>
+                when "00" =>
                     -- hold
                     Output <= reg;
-                when '01' =>
+                when "01" =>
                     -- shift right
                     reg <= right_shift;
                     Output <= reg;
-                when '10' =>
+                when "10" =>
                     -- shift left
                     reg <= left_shift;
                     Output <= reg;
-                when '11' =>
+                when "11" =>
                     -- load
                     reg <= Input;
                     Output <= reg;
@@ -74,6 +74,6 @@ begin
                     reg <= (others => 'X');
                     Output <= (others => 'X');
             end case;
-        end if
+        end if;
     end process s_process;
 end behavior;

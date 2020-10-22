@@ -4,9 +4,9 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 use std.textio.all;
-use ieee.std_logic_testio.all;
+use ieee.std_logic_textio.all;
 
-use work.sim_mem_unit.all;
+use work.sim_mem_init.all;
 
 entity Barrel is 
 end;
@@ -74,7 +74,7 @@ begin
                         sel <= in_slv(1 downto 0);
                     elsif (i = 8) then
                         shift <= in_slv(1 downto 0);
-                    end if
+                    end if;
                 end loop;
 
                 readline(output_file, input_line);
@@ -89,7 +89,7 @@ begin
                         expected(7 downto 4) <= ASCII_to_hex(out_slv);
                     elsif (i = 4) then
                         expected(3 downto 0) <= ASCII_to_hex(out_slv);
-                    end if
+                    end if;
                 end loop;
 
                 clk <= '1';
@@ -107,7 +107,7 @@ begin
                     write(writeBuffer, data_out);
                     writeline(Output, WriteBuffer);
                     errorCount := errorCount + 1;
-                end if
+                end if;
             end loop;
 
             file_close(input_file);
@@ -117,6 +117,6 @@ begin
                 report "SUCCESS: Barrel Shift Test Completed."
             else
                 report "The Barrel Shifter is Broken." severity warning;
-            end if
+            end if;'
     end process stimulus;
 end test;
