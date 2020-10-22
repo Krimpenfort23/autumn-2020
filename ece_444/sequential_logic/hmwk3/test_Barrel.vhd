@@ -73,7 +73,7 @@ begin
                     elsif (i = 6) then
                         sel <= in_slv(1 downto 0);
                     elsif (i = 8) then
-                        shift <= to_integer(unsigned(in_slv(1 downto 0)));
+                        shift <= to_integer(unsigned(in_slv(2 downto 0)));
                     end if;
                 end loop;
 

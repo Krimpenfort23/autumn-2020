@@ -27,9 +27,9 @@ signal reg          :   std_logic_vector(bit_depth-1 downto 0) := (others => '0'
 begin
 	Output <= reg;
 	
-    shift_process: process(Input, Shift, Reset)
+    shift_process: process(Input, Shift, Reset, clk)
     begin
-        if (Reset = '1') then
+        if (Reset = '1' and rising_edge(clk)) then
             -- no reset
 			right_shift <= std_logic_vector(unsigned(reg) srl Shift);
 			left_shift <= std_logic_vector(unsigned(reg) sll Shift);

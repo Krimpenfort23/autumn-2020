@@ -9,7 +9,7 @@ z2
 cModel Technology
 Z0 dC:/Users/User/Documents/College/Senior Year/autumn-2020/ece_444/sequential_logic/hmwk3
 Ebarrel
-Z1 w1603333918
+Z1 w1603335334
 Z2 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
 Z3 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
 Z4 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
@@ -22,9 +22,9 @@ Vid4:HX__LAmGjKd29<lNb1
 !s100 ;[Ez=MOn[0:z<0dDi]PI>2
 Z7 OV;C;10.4b;61
 32
-Z8 !s110 1603333925
+Z8 !s110 1603335374
 !i10b 1
-Z9 !s108 1603333925.000000
+Z9 !s108 1603335374.000000
 Z10 !s90 -reportprogress|300|Barrel.vhd|
 Z11 !s107 Barrel.vhd|
 !i113 1
@@ -36,8 +36,8 @@ R4
 DEx4 work 6 barrel 0 22 id4:HX__LAmGjKd29<lNb1
 l27
 L22
-V0RbH:S2_Qc2HTe;bjo5l[2
-!s100 ;<C4V<e?^E2JSHgc[Q[Jh0
+V9eNO_kLYQPWlZfc>o`jX_0
+!s100 0eETz^=d>O_ZdljFNG45G3
 R7
 32
 R8
@@ -91,7 +91,7 @@ R18
 R12
 nbody
 Etest_barrel
-Z20 w1603331235
+Z20 w1603335033
 R19
 R13
 R2
@@ -122,8 +122,8 @@ R4
 Z25 DEx4 work 11 test_barrel 0 22 V1>CfF8_NEeCBCh5WjR<T3
 l46
 L14
-Z26 Vg@<826[U1DEO3V^ZK4:MH2
-Z27 !s100 d:hb:ZHGTTDW[ml]>[i;72
+Z26 VhLPga@0nABZAM<FzTYFRB0
+Z27 !s100 2I2h10SzikMJmiDgh[k;I0
 R7
 32
 R8
