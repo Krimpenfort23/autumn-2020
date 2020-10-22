@@ -23,46 +23,37 @@ architecture behavior of Barrel is
 signal right_shift  :   std_logic_vector(bit_depth-1 downto 0) := (others => '0');
 signal left_shift   :   std_logic_vector(bit_depth-1 downto 0) := (others => '0');
 signal reg          :   std_logic_vector(bit_depth-1 downto 0) := (others => '0');
+signal mux_out      :   std_logic_vector(bit_depth-1 downto 0) := (others => '0');
 
 begin
 	Output <= reg;
-	
-    shift_process: process(Input, Shift, Reset, clk)
-    begin
-        if (Reset = '1' and rising_edge(clk)) then
-            -- no reset
-			right_shift <= std_logic_vector(unsigned(reg) srl Shift);
-			left_shift <= std_logic_vector(unsigned(reg) sll Shift);
-        else
-            -- resets the register and resets the Output
-            reg <= (others => '0');
-        end if;
-    end process shift_process;
 
-    s_process: process(Clk, Input, Sel, right_shift, left_shift, Reset)
+    mux_process: process(Input, Sel, reg, right_shift, left_shift)
     begin 
-        if (Reset = '0') then
-            -- resets the register and resets the Output
-            reg <= (others => '0');
-        elsif rising_edge(Clk) then
-            -- no reset
-            case Sel is
-                when "00" =>
-                    -- hold
-                    reg <= reg;
-                when "01" =>
-                    -- shift right
-                    reg <= reg(shift-1 downto 0) & right_shift(bit_depth-shift-1 downto 0);
-                when "10" =>
-                    -- shift left
-                    reg <= left_shift(bit_depth-1 downto shift) & reg(bit_depth-1 downto bit_depth-shift);
-                when "11" =>
-                    -- load
-                    reg <= Input;
-                when others =>
-                    -- When Select is wrong
-                    reg <= (others => 'X');
-            end case;
+        case Sel is
+            when "00" =>    -- hold
+                mux_out <= reg;
+            when "01" =>    -- shift right
+                right_shift <= std_logic_vector(unsigned(reg) srl Shift);
+                mux_out <= reg(shift-1 downto 0) & right_shift(bit_depth-shift-1 downto 0);
+            when "10" =>    -- shift left
+                left_shift <= std_logic_vector(unsigned(reg) sll Shift);
+                mux_out <= left_shift(bit_depth-1 downto shift) & reg(bit_depth-1 downto bit_depth-shift);
+            when "11" =>    -- load
+                mux_out <= Input;
+            when others =>  -- When Select is wrong
+                mux_out <= (others => 'X');
+        end case;
+    end process mux_process;
+
+    reg_process: process(clk)
+    begin
+        if(rising_edge(clk)) then
+            if (reset = '0') then
+                reg <= (others => '0');
+            else
+                reg <= mux_out;
+            end if;
         end if;
-    end process s_process;
+    end process reg_process;
 end behavior;
