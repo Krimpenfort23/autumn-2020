@@ -49,74 +49,74 @@ begin
         port map(data_out, data_in, sel, shift, reset, clk);
     
     stimulus:   process
-        variable input_line     : line;
-        variable writeBuffer    : line;
-        variable in_char        : character;
-        variable in_slv         : std_logic_vector(7 downto 0);
-        variable out_slv        : std_logic_vector(7 downto 0);
-        variable errorCount     : integer := 0;
+    variable input_line     : line;
+    variable writeBuffer    : line;
+    variable in_char        : character;
+    variable in_slv         : std_logic_vector(7 downto 0);
+    variable out_slv        : std_logic_vector(7 downto 0);
+    variable errorCount     : integer := 0;
 
-        begin
-            file_open(input_file, in_fname, read_mode);
-            file_open(output_file, out_fname, read_mode);
+    begin
+        file_open(input_file, in_fname, read_mode);
+        file_open(output_file, out_fname, read_mode);
 
-            while not(endfile(input_file)) loop
-                readline(input_file, input_line);
+        while not(endfile(input_file)) loop
+            readline(input_file, input_line);
 
-                for i in 0 to 8 loop
-                    read(input_line, in_char);
-                    in_slv := std_logic_vector(to_unsigned(character'pos(in_char), 8));
-                    if (i = 3) then
-                        data_in(7 downto 4) <= ASCII_to_hex(in_slv);
-                    elsif (i = 4) then
-                        data_in(3 downto 0) <= ASCII_to_hex(in_slv);
-                    elsif (i = 6) then
-                        sel <= in_slv(1 downto 0);
-                    elsif (i = 8) then
-                        shift <= to_integer(unsigned(in_slv(2 downto 0)));
-                    end if;
-                end loop;
-
-                readline(output_file, input_line);
-
-                clk <= '0';
-                wait for 10 ns;
-
-                for i in 0 to 4 loop
-                    read(input_line, in_char);
-                    out_slv := std_logic_vector(to_unsigned(character'pos(in_char), 8));
-                    if (i = 3) then
-                        expected(7 downto 4) <= ASCII_to_hex(out_slv);
-                    elsif (i = 4) then
-                        expected(3 downto 0) <= ASCII_to_hex(out_slv);
-                    end if;
-                end loop;
-
-                clk <= '1';
-                wait for 10 ns;
-
-                if (expected /= data_out) then
-                    write(writeBuffer, string'("ERROR: Barrel Shifter Failed."));
-                    writeline(Output, WriteBuffer);
-
-                    write(writeBuffer, string'("expected = "));
-                    write(writeBuffer, expected);
-                    writeline(Output, WriteBuffer);
-
-                    write(writeBuffer, string'("actual = "));
-                    write(writeBuffer, data_out);
-                    writeline(Output, WriteBuffer);
-                    errorCount := errorCount + 1;
+            for i in 0 to 8 loop
+                read(input_line, in_char);
+                in_slv := std_logic_vector(to_unsigned(character'pos(in_char), 8));
+                if (i = 3) then
+                    data_in(7 downto 4) <= ASCII_to_hex(in_slv);
+                elsif (i = 4) then
+                    data_in(3 downto 0) <= ASCII_to_hex(in_slv);
+                elsif (i = 6) then
+                    sel <= in_slv(1 downto 0);
+                elsif (i = 8) then
+                    shift <= to_integer(unsigned(in_slv(2 downto 0)));
                 end if;
             end loop;
 
-            file_close(input_file);
-            file_close(output_file);
+            readline(output_file, input_line);
 
-            if (errorCount = 0) then
-                report "SUCCESS: Barrel Shift Test Completed.";
-            else
-                report "The Barrel Shifter is Broken." severity warning;
+            clk <= '0';
+            wait for 10 ns;
+
+            for i in 0 to 4 loop
+                read(input_line, in_char);
+                out_slv := std_logic_vector(to_unsigned(character'pos(in_char), 8));
+                if (i = 3) then
+                    expected(7 downto 4) <= ASCII_to_hex(out_slv);
+                elsif (i = 4) then
+                    expected(3 downto 0) <= ASCII_to_hex(out_slv);
+                end if;
+            end loop;
+
+            clk <= '1';
+            wait for 10 ns;
+
+            if (expected /= data_out) then
+                write(writeBuffer, string'("ERROR: Barrel Shifter Failed."));
+                writeline(Output, WriteBuffer);
+
+                write(writeBuffer, string'("expected = "));
+                write(writeBuffer, expected);
+                writeline(Output, WriteBuffer);
+
+                write(writeBuffer, string'("actual = "));
+                write(writeBuffer, data_out);
+                writeline(Output, WriteBuffer);
+                errorCount := errorCount + 1;
             end if;
+        end loop;
+
+        file_close(input_file);
+        file_close(output_file);
+
+        if (errorCount = 0) then
+            report "SUCCESS: Barrel Shift Test Completed.";
+        else
+            report "The Barrel Shifter is Broken." severity warning;
+        end if;
     end process stimulus;
 end test;
