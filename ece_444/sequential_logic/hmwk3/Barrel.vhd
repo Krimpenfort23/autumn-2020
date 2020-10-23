@@ -28,7 +28,7 @@ signal mux_out      :   std_logic_vector(bit_depth-1 downto 0) := (others => '0'
 begin
 	Output <= reg;
     
-    mux_process: process(Input, Sel, reg, right_shift, left_shift)
+    mux_process: process(Input, Sel, reg, right_shift, left_shift, Shift)
     begin 
         case Sel is
             when "00" =>    -- hold
