@@ -28,16 +28,22 @@ signal mux_out      :   std_logic_vector(bit_depth-1 downto 0) := (others => '0'
 begin
 	Output <= reg;
     
+	--shift_process: process(reg, shift)
+	--begin
+	--	right_shift <= std_logic_vector(unsigned(reg) srl Shift);
+    --    left_shift <= std_logic_vector(unsigned(reg) sll Shift);
+	--end process shift_process;
+	
     mux_process: process(Input, Sel, reg, right_shift, left_shift, Shift)
     begin 
         case Sel is
             when "00" =>    -- hold
                 mux_out <= reg;
             when "01" =>    -- shift right
-                right_shift <= std_logic_vector(unsigned(reg) srl Shift);
+                --right_shift <= std_logic_vector(unsigned(reg) srl Shift);
                 mux_out <= reg(shift-1 downto 0) & right_shift(bit_depth-shift-1 downto 0);
             when "10" =>    -- shift left
-                left_shift <= std_logic_vector(unsigned(reg) sll Shift);
+                --left_shift <= std_logic_vector(unsigned(reg) sll Shift);
                 mux_out <= left_shift(bit_depth-1 downto shift) & reg(bit_depth-1 downto bit_depth-shift);
             when "11" =>    -- load
                 mux_out <= Input;
