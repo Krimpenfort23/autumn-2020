@@ -1,0 +1,170 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/User/Documents/College/Senior Year/autumn-2020/ece_444/sequential_logic/lsfr
+Elfsr_18
+Z1 w1603992438
+Z2 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+Z3 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z4 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+R0
+Z5 8LFSR_18.vhd
+Z6 FLFSR_18.vhd
+l0
+L5
+VK1Wg<<jC7@8Cg2_on0CUL1
+!s100 9ZXYPjke?mZ2lE32^?cCL2
+Z7 OV;C;10.4b;61
+32
+Z8 !s110 1603992775
+!i10b 1
+Z9 !s108 1603992775.000000
+Z10 !s90 -reportprogress|300|LFSR_18.vhd|
+Z11 !s107 LFSR_18.vhd|
+!i113 1
+Z12 tExplicit 1
+Abehavior
+R2
+R3
+R4
+DEx4 work 7 lfsr_18 0 22 K1Wg<<jC7@8Cg2_on0CUL1
+l27
+L18
+VaQ6UdkO@EMS<7BMaee<Fi1
+!s100 <3OMhdkjRl[D;69cR8<573
+R7
+32
+R8
+!i10b 1
+R9
+R10
+R11
+!i113 1
+R12
+Elfsr_71
+Z13 w1603992624
+R2
+R3
+R4
+R0
+Z14 8LFSR_71.vhd
+Z15 FLFSR_71.vhd
+l0
+L5
+V[]V84SJn@l9@4PG9[j<3@2
+!s100 c?kF1aICG>JlEJNI=Qb`M2
+R7
+32
+Z16 !s110 1603992808
+!i10b 1
+Z17 !s108 1603992808.000000
+Z18 !s90 -reportprogress|300|LFSR_71.vhd|
+Z19 !s107 LFSR_71.vhd|
+!i113 1
+R12
+Abehavior
+R2
+R3
+R4
+DEx4 work 7 lfsr_71 0 22 []V84SJn@l9@4PG9[j<3@2
+l27
+L18
+VZhd6>Fo7A3bKXBZjj0]5J1
+!s100 5miBKO?JNa7[fSHT5faAY3
+R7
+32
+R16
+!i10b 1
+R17
+R18
+R19
+!i113 1
+R12
+Etest_lfsr_18
+Z20 w1603989749
+Z21 DPx4 ieee 16 std_logic_textio 0 22 V5TSK`;aJKC<l]CEg1>mz1
+R2
+R3
+R4
+R0
+Z22 8test_LFSR_18.vhd
+Z23 Ftest_LFSR_18.vhd
+l0
+L8
+V[LDliFO`lBe;if27KhIg<3
+!s100 OdSiA21^L@BSfB5U=mYn;0
+R7
+32
+R8
+!i10b 1
+R9
+Z24 !s90 -reportprogress|300|test_LFSR_18.vhd|
+Z25 !s107 test_LFSR_18.vhd|
+!i113 1
+R12
+Atest
+R21
+R2
+R3
+R4
+DEx4 work 12 test_lfsr_18 0 22 [LDliFO`lBe;if27KhIg<3
+l32
+L11
+V55cjlJoo;FC^5;dN4jX:k3
+!s100 J@eZ91bg:z6dB77]9T;Ad2
+R7
+32
+R8
+!i10b 1
+R9
+R24
+R25
+!i113 1
+R12
+Etest_lfsr_71
+Z26 w1603990423
+R21
+R2
+R3
+R4
+R0
+Z27 8test_LFSR_71.vhd
+Z28 Ftest_LFSR_71.vhd
+l0
+L8
+VQmBUm>j_D3<>0QzGkm9em0
+!s100 Vd69>Bd@OhF>dVfC4Fg=82
+R7
+32
+R16
+!i10b 1
+R17
+Z29 !s90 -reportprogress|300|test_LFSR_71.vhd|
+Z30 !s107 test_LFSR_71.vhd|
+!i113 1
+R12
+Atest
+R21
+R2
+R3
+R4
+DEx4 work 12 test_lfsr_71 0 22 QmBUm>j_D3<>0QzGkm9em0
+l32
+L11
+Vo2[jR9?TNEc4jMdY0Xn;m1
+!s100 5gMoj=A0X1GB^2l]QaY7e2
+R7
+32
+R16
+!i10b 1
+R17
+R29
+R30
+!i113 1
+R12
