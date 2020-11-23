@@ -77,16 +77,16 @@ begin
 			-- let's read the first 10 characters in the row
 			for i in 0 to 9 loop
 				read(input_line,in_char);
-				in_slv := std_logic_vector(to_unsigned(character'pos(in_char),8));
+				in_slv := std_logic_vector(to_signed(character'pos(in_char),8));
 			  
 				if(i = 3) then
-					input_1(7 downto 4) <= unsigned(ASCII_to_hex(in_slv));
+					input_1(7 downto 4) <= signed(ASCII_to_hex(in_slv));
 				elsif(i = 4) then
-					input_1(3 downto 0) <= unsigned(ASCII_to_hex(in_slv));
+					input_1(3 downto 0) <= signed(ASCII_to_hex(in_slv));
 				elsif(i = 6) then
-					input_2(7 downto 4) <= unsigned(ASCII_to_hex(in_slv));
+					input_2(7 downto 4) <= signed(ASCII_to_hex(in_slv));
 				elsif(i = 7) then
-					input_2(3 downto 0) <= unsigned(ASCII_to_hex(in_slv));
+					input_2(3 downto 0) <= signed(ASCII_to_hex(in_slv));
 				elsif(i = 9) then
 					start <= in_slv(0);
 				end if;
