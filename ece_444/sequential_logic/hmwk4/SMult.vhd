@@ -49,6 +49,7 @@ begin
     -- start_count = '1'on the rising edge of the start input
     start_SMult <= start_SMult_lead and (not start_SMult_follow);
     start_SMult_process :   process(clk)
+	begin
         if (rising_edge(clk)) then
             if (reset = '0') then
                 start_SMult_lead <= '0';
@@ -74,7 +75,7 @@ begin
     end process state_process;
 
     -- state machine 2
-    state_machine : process(state, start, start_SMult, count, product_reg(0))
+    state_machine : process(state, start, start_SMult, count, P_reg)
     begin
         -- init next_state and control signals
         next_state <= state;
@@ -97,9 +98,9 @@ begin
                     next_state <= done;
                 end if;
                 if ((P_reg(0) = '1') and (P_reg(1) = '0')) then     -- 01
-                    add_A_and_shift = '1';
+                    add_A_and_shift <= '1';
                 elsif ((P_reg(0) = '0') and (P_reg(1) = '1')) then  -- 10
-                    add_S_and_Shift = '1';
+                    add_S_and_Shift <= '1';
                 else                                                -- 00 or 01
                     shift <= '1';
                 end if;

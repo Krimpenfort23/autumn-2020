@@ -1,0 +1,74 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/User/Documents/College/Senior Year/autumn-2020/ece_444/sequential_logic/hmwk4
+Psim_mem_init
+Z1 DPx4 ieee 16 std_logic_textio 0 22 V5TSK`;aJKC<l]CEg1>mz1
+Z2 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+Z3 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z4 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+Z5 w1606189511
+R0
+Z6 8sim_mem_init.vhd
+Z7 Fsim_mem_init.vhd
+l0
+L11
+Vh^VM6?MLGX:7lZKFS0lN72
+!s100 4:0L5Y8fgRoaAco03M<PJ2
+Z8 OV;C;10.4b;61
+32
+b1
+Z9 !s110 1606190019
+!i10b 1
+Z10 !s108 1606190019.000000
+Z11 !s90 -reportprogress|300|sim_mem_init.vhd|
+Z12 !s107 sim_mem_init.vhd|
+!i113 1
+Z13 tExplicit 1
+Bbody
+DPx4 work 12 sim_mem_init 0 22 h^VM6?MLGX:7lZKFS0lN72
+R1
+R2
+R3
+R4
+l0
+L24
+VTjHEkoL><:1@c85iWZR]_3
+!s100 CI6TmhJYZNQ:JEJ2e9hhR1
+R8
+32
+R9
+!i10b 1
+R10
+R11
+R12
+!i113 1
+R13
+nbody
+Esmult
+w1606190016
+R2
+R3
+R4
+R0
+8SMult.vhd
+FSMult.vhd
+l0
+L7
+V^l[T7libG1ng<Y;ocW@M`1
+!s100 ?e?Oz=@7ZV9zcJz08SoQW3
+R8
+32
+R9
+!i10b 1
+R10
+!s90 -reportprogress|300|SMult.vhd|
+!s107 SMult.vhd|
+!i113 1
+R13
