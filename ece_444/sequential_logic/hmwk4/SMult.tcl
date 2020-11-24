@@ -17,6 +17,6 @@ vsim test_SMult
 add wave sim:/test_SMult/dev_to_test/*
 
 # define simulation time
-run 530 ns
+run 2010 ns
 # zoom out
 wave zoom full
