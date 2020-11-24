@@ -138,19 +138,19 @@ begin
                 A_reg <= (others => '0');
                 S_reg <= (others => '0');
             elsif (load_data = '1') then
-                P_reg <= ((2*input_size downto input_size+1) => '0') & input_2(input_size downto 1) & '0';
-                A_reg <= input_1(2*input_size downto input_size+1) & ((input_size downto 0) => '0');
-                S_reg <= signed((input_1(2*input_size downto input_size+1) NAND '1') + '1') & ((input_size downto 0) => '0');
+                P_reg <= (input_size-1 downto 0 => '0') & input_2 & (0 => '0');
+                A_reg <= input_1 & (input_size downto 0 => '0');
+                S_reg <= (signed((not unsigned(input_1)) + 1)) & (input_size downto 0 => '0');
             elsif (add_A_and_shift = '1') then
-                P_reg <= signed(AplusP sra 1);
+                P_reg <= signed(to_tdlogicvector(to_bitvector(std_logic_vector(AplusP)) sra 1));
             elsif (add_S_and_shift = '1') then
-                P_reg <= signed(SplusP sra 1);
+                P_reg <= signed(to_tdlogicvector(to_bitvector(std_logic_vector(SplusP)) sra 1));
             elsif (shift = '1') then
-                P_reg <= signed(P_reg sra 1);
+                P_reg <= signed(to_tdlogicvector(to_bitvector(std_logic_vector(P_reg)) sra 1));
             end if;
         end if;
     end process mult_process;
 
     -- define the output
-    product <= P_reg;
+    product <= P_reg(2*input_size downto 1);
 end behavior;
