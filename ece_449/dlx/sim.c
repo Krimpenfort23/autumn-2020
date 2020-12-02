@@ -1,3 +1,8 @@
+/**
+ * 
+ * 
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include "globals.h"
@@ -5,8 +10,15 @@
 // Max cycles simulator will execute -- to stop a runaway simulator
 #define FAIL_SAFE_LIMIT  500000
 
+// types
 struct instruction   inst_mem[MAX_LINES_OF_CODE];  	// instruction memory
 struct instruction   IR;                        	// instruction register
+struct pipeline pipeline_one;
+struct pipeline pipeline_two;
+struct pipeline pipeline_three; 
+struct pipeline pipeline_four;
+
+// variables
 int   data_mem[MAX_WORDS_OF_DATA];              	// data memory
 int   int_regs[16];                             	// integer register file
 int   PC, NPC;                                  	// PC and next PC
@@ -29,8 +41,6 @@ int   branch_end = 0;
 int   EX_LW_stop = 0;					    
 int   branch_LW_stop_one = 0;					
 int   branch_LW_stop_two = 0;					
-
-struct pipeline pipeline_one, pipeline_two, pipeline_three, pipeline_four;
 
 // Onto simulating a pipelined DLX processor
 
@@ -69,6 +79,7 @@ void IF_stage()
 			pipeline_one.valid = 1;
 		}
 		
+		// end of program checking
 		if (NPC == code_length) 
 			IF_continue = 0;
 	}
@@ -191,8 +202,10 @@ void ID_stage()
 			A = pipeline_three.ALU_output;
 			ID_continue = 1;
 		}
-		else if ((pipeline_one.IR.op == LW) && ((pipeline_three.IR.op == ADDI) || (pipeline_three.IR.op == SUBI)) &&
-		(pipeline_one.IR.rs == pipeline_three.IR.rt)) {
+		else if ((pipeline_one.IR.op == LW) && 
+				((pipeline_three.IR.op == ADDI) || (pipeline_three.IR.op == SUBI)) &&
+				(pipeline_one.IR.rs == pipeline_three.IR.rt)) 
+		{
 			A = pipeline_three.ALU_output;
 			ID_continue = 1;
 		}
@@ -248,6 +261,7 @@ void ID_stage()
 		pipeline_two.A = A;
 		pipeline_two.B = B;
 		
+		// end of program checking
 		if ((IF_continue == 0) && 
             (NPC == code_length) && 
             ((pipeline_one.IR.op != BEQZ) &&
@@ -350,6 +364,7 @@ void EX_stage()
 				pipeline_two.A = pipeline_four.load_memory_data;
 		}		
 		
+		//
 		if ((pipeline_two.IR.op == SW) && 
             (pipeline_four.IR.rd != 0) && 
 		    ((pipeline_four.IR.op == ADD) || (pipeline_four.IR.op == SUB))) 
@@ -385,6 +400,7 @@ void EX_stage()
 		pipeline_three.IR = pipeline_two.IR;
 		pipeline_three.B = pipeline_two.B;
 		
+		// end of program checking
 		if (EX_LW_stop == 0)
 			pipeline_three.valid = 1;
 		
@@ -440,6 +456,7 @@ void MEM_stage()
 		pipeline_four.IR = pipeline_three.IR;
 		pipeline_four.valid = 1;
 		
+		// end of program checking
 		if ((IF_continue == 0) && 
             (pipeline_one.valid == 0) &&
 			(pipeline_two.valid == 0) && 
@@ -465,21 +482,24 @@ void MEM_stage()
 void WB_stage() 
 {
     /* ------------------------------ WB stage ------------------------------ */
-	if (pipeline_four.valid == 1) {
-		
+	if (pipeline_four.valid == 1) 
+	{	
 		/* write to register and check if output register is R0 */
 		if (pipeline_four.IR.op == ADD || pipeline_four.IR.op == SUB) 
         {
+			// R-type
 			int_regs[pipeline_four.IR.rd] = pipeline_four.ALU_output;
 			wrote_r0 = (pipeline_four.IR.rd == R0);
 		}
 		else if (pipeline_four.IR.op == ADDI || pipeline_four.IR.op == SUBI) 
         {
+			// I-type
 			int_regs[pipeline_four.IR.rt] = pipeline_four.ALU_output;
 			wrote_r0 = (pipeline_four.IR.rt == R0);
 		}
 		else if (pipeline_four.IR.op == LW) 
         {
+			// I-type with load word - this looks at pipeline four 
 			int_regs[pipeline_four.IR.rt] = pipeline_four.load_memory_data;
 			wrote_r0 = (pipeline_four.IR.rt == R0);
 		}
@@ -494,6 +514,7 @@ void WB_stage()
 			exit(0);
 		}
 		
+		// end of program checking
 		if ((IF_continue == 0) && 
             (pipeline_one.valid == 0) &&
 			(pipeline_two.valid == 0) && 
@@ -501,7 +522,6 @@ void WB_stage()
             (PC == code_length)) 
 			pipeline_four.valid = 0;
 	}
-	
 	else if (pipeline_four.stall == 1) 
     {
 	    // if this stage is stalling, allow the next iteration to run normally
@@ -533,7 +553,6 @@ main(int argc, char**argv)
 	int_regs[R0] = 0;         /* register R0 is alway zero */
 	inst_executed = 0;
 
-
 	// Main simulator loop, ends when all the stages won't continue anymore
 	while (IF_continue == 1 || pipeline_one.valid == 1 ||
 		   pipeline_two.valid == 1 || pipeline_three.valid == 1 || 
@@ -555,7 +574,6 @@ main(int argc, char**argv)
 			break;
 		}
 	}
-
 
 	/* print final register values and simulator statistics */
 	printf("Final register file values:\n");
