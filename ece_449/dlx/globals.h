@@ -33,12 +33,27 @@
 	** always be defined.
 	*/
 
-struct instruction {
+struct instruction 
+{
 	int	op;		/* operation (op-code) */
 	int	rd;		/* rd register tag */
 	int	rs;		/* rs register tag */
 	int	rt;		/* rt register tag */
 	int	imm;    /* actual immediate value in assembler inst */
+};
+
+struct pipeline
+{
+	int NPC;
+	struct instruction IR;
+	int A;
+	int B;
+	int ALU_output;
+	int load_memory_data;
+	int PC;
+	int valid;
+	int stall;
+	int stop;
 };
 
 #define MAX_LINES_OF_CODE	100
