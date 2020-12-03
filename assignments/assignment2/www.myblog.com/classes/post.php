@@ -65,9 +65,9 @@ class Post{
   function add_comment() {
     global $dblink;
     $sql  = "INSERT INTO comments (title,author, text, post_id) values ('";
-    $sql .= mysqli_real_escape_string($dblink, $_POST["title"])."','";
-    $sql .= mysqli_real_escape_string($dblink, $_POST["author"])."','";
-    $sql .= mysqli_real_escape_string($dblink, $_POST["text"])."',";
+    $sql .= mysqli_real_escape_string($dblink, htmlspecialchars($_POST["title"]))."','";
+    $sql .= mysqli_real_escape_string($dblink, htmlspecialchars($_POST["author"]))."','";
+    $sql .= mysqli_real_escape_string($dblink, htmlspecialchars($_POST["text"]))."',";
     $sql .= intval($this->id).")";
     $result = mysqli_query($dblink, $sql);
     echo mysqli_error(); 
@@ -78,7 +78,7 @@ class Post{
     $str.= "<p>".htmlentities($this->text)."</p></div>";   
     $str.= "\n\n<div class='comments'><h3>Comments: </h3>\n<ul>";
     foreach ($this->get_comments() as $comment) {
-      $str.= "\n\t<li>".$comment->text."</li>";
+      $str.= "\n\t<li>".htmlentities($comment->text)."</li>";
     }
     $str.= "\n</ul></div>";
     return $str;
