@@ -9,7 +9,8 @@
   $_SESSION["nocsrftoken"] = $rand; 
   
   $post = Post::find($_GET['id']);
-  if (isset($_POST['title'])) {
+  if (isset($_POST['title'])) 
+  {
     $post->update($_POST['title'], $_POST['text']);
   } 
 ?>

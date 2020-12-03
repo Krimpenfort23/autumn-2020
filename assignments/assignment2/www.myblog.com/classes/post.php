@@ -15,6 +15,8 @@ class Post{
     $sql = "SELECT * FROM posts";
     if (isset($order)) 
       $sql .= "order by ".mysqli_real_escape_string($dblink, $order);  
+
+    /* Code Review: This part is okay b/c of mysqli_real_escape_string. */
     $results= mysqli_query($dblink, $sql);
     $posts = Array();
     if ($results) {
@@ -68,6 +70,8 @@ class Post{
     $sql .= mysqli_real_escape_string($dblink, htmlspecialchars($_POST["title"]))."','";
     $sql .= mysqli_real_escape_string($dblink, htmlspecialchars($_POST["author"]))."','";
     $sql .= mysqli_real_escape_string($dblink, htmlspecialchars($_POST["text"]))."',";
+
+    /* Code Review: This part is okay b/c of mysqli_real_escape_string. */
     $sql .= intval($this->id).")";
     $result = mysqli_query($dblink, $sql);
     echo mysqli_error(); 
@@ -89,6 +93,8 @@ class Post{
     if (!preg_match('/^[0-9]+$/', $this->id)) {
       die("ERROR: INTEGER REQUIRED");
     }
+
+    /* Code Review: This part is okay b/c of the integer assertion. */
     $comments = Array();
     $result = mysqli_query($dblink, "SELECT count(*) as count FROM comments where post_id=".$this->id);
     $row = mysqli_fetch_assoc($result);
@@ -100,6 +106,8 @@ class Post{
     if (!preg_match('/^[0-9]+$/', $this->id)) {
       die("ERROR: INTEGER REQUIRED");
     }
+
+    /* Code Review: This part is okay b/c of the integer assertion. */
     $comments = Array();
     $results = mysqli_query($dblink, "SELECT * FROM comments where post_id=".$this->id);
     if (isset($results)){
@@ -112,19 +120,31 @@ class Post{
  
   function find($id) {
     global $dblink;
+    /*
     $result = mysqli_query($dblink, "SELECT * FROM posts where id=".$id);
     $row = mysqli_fetch_assoc($result); 
     if (isset($row)){
       $post = new Post($row['id'],$row['title'],$row['text'],$row['published']);
     }
+    */
+    $prepared_sql = "SELECT id, title, text, published FROM posts WHERE id=?";
+    $stmt = mysqli_prepare($dblink, $prepared_sql);
+    mysqli_stmt_bind_param($stmt, 'i', $id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $id, $title, $text, $published);
+    if (mysqli_stmt_fetch($stmt))
+    {
+      $post = new Post($id, $title, $text, $published);
+    }
     return $post;
-  
   }
   function delete($id) {
     global $dblink;
     if (!preg_match('/^[0-9]+$/', $id)) {
       die("ERROR: INTEGER REQUIRED");
     }
+
+    /* Code Review: This part is okay b/c of the integer assertion. */
     $result = mysqli_query($dblink, "DELETE FROM posts where id=".(int)$id);
   }
   
@@ -133,6 +153,8 @@ class Post{
       $sql = "UPDATE posts SET title='";
       $sql .= mysqli_real_escape_string($dblink, htmlspecialchars($_POST["title"]))."',text='";
       $sql .= mysqli_real_escape_string($dblink, htmlspecialchars($_POST["text"]))."' WHERE id=";
+
+      /* Code Review: This part is okay b/c of mysqli_real_escape_string. */
       $sql .= intval($this->id);
       $result = mysqli_query($dblink,$sql);
       $this->title = $title; 
@@ -144,6 +166,7 @@ class Post{
       $sql = "INSERT INTO posts (title, text) VALUES ('";
       $title = mysqli_real_escape_string($dblink, htmlspecialchars($_POST["title"]));
       $text = mysqli_real_escape_string($dblink, htmlspecialchars($_POST["text"]));
+      /* Code Review: This part is okay b/c of mysqli_real_escape_string. */
       $sql .= $title."','".$text;
       $sql.= "')";
       $result = mysqli_query($dblink,$sql);
