@@ -7,6 +7,12 @@
   require("../classes/comment.php");
 
    if(isset($_POST['title'])){
+      $nocsrftoken = $_POST["nocsrftoken"];
+      if (!isset($nocsrftoken) or ($nocsrftoken != $_SESSION['nocsrftoken']))
+      {
+        echo "Cross Site Forgery Detected!";
+        die();
+      }
       Post::create();
    }
 ?>
