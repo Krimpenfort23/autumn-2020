@@ -23,12 +23,14 @@
 <div>
 <?php  
   $posts= Post::all();
+  $rand = bin2hex(openssl_random_pseudo_bytes(16));
+  $_SESSION["nocsrftoken_get"] = $rand;
 
   foreach ($posts as $post) {
     echo "<tr>";
     echo "<td><a href=\"../post.php?id=".h($post->id)."\">".h($post->title)."</a></td>";
     echo "<td><a href=\"edit.php?id=".h($post->id)."\">edit</a></td>";
-    echo "<td><a href=\"del.php?id=".h($post->id)."\">delete</a></td>";
+    echo "<td><a href=\"del.php?id=".h($post->id)."&nocsrftoken_get=".h($rand)."\">delete</a></td>";
     echo "</tr>";
   }
 ?>

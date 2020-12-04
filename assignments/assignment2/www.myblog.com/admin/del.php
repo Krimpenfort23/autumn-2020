@@ -4,12 +4,16 @@
   require("../classes/db.php");
   require("../classes/phpfix.php");
   require("../classes/post.php");
-
-  $rand = bin2hex(openssl_random_pseudo_bytes(16));
-  $_SESSION["nocsrftoken"] = $rand; 
 ?>
 
 <?php  
+  $nocsrftoken_get = $_GET["nocsrftoken_get"];
+  if (!isset($nocsrftoken_get) or ($nocsrftoken_get != $_SESSION['nocsrftoken_get']))
+  {
+    echo "Cross Site Forgery Detected!";
+    die();
+  }
+
   $post = Post::delete((int)($_GET["id"]));
   header("Location: /admin/index.php");
 ?>
