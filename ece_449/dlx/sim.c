@@ -1,6 +1,7 @@
 /**
- * 
- * 
+ * Project:		Turning a nonpipelined processor into a pipelined processor
+ * Author:		Tarek Taha
+ * Modified:	Evan Krimpenfort
  */
 
 #include <stdio.h>
@@ -46,6 +47,23 @@ int   branch_LW_stop_two = 0;
 
 /*
  * Instruction Fetch Stage
+ * 
+ * This stage starts off by checking whether or not the stage is to cycle through
+ * The stage may not due to...
+ * - flushing
+ * - branches
+ * 
+ * If the stage does continue in the cycle, conditionals that are checked are...
+ * - Instruction memory domain
+ * - If the Fetch stage is stalled...
+ * 		- if stalled, it makes sure that pipeline one is not valid (cannot be used).
+ * - If the Fetch stage is not stalled...
+ * 		- The instruction is read from memory and prepares the following pipelines.
+ * 
+ * - There is also a check for end of program.
+ * 
+ * If the stage does not continue into the cycle, it checks if it is stopped
+ * or if the program was branching.
  */
 void IF_stage() 
 {
@@ -58,18 +76,12 @@ void IF_stage()
 			printf("Exception: Fetch: out-of-bounds inst memory access at PC=%d\n", PC);
 			exit(0);
 		}
-
-		if (IF_stall == 1) 
+		else if (IF_stall == 1) 
         {
 			pipeline_one.valid = 0;
 			pipeline_one.stall = 1;
 			IF_stall = 0;
 		} 
-		else if (IF_stop == 1) 
-        {
-			PC = NPC;
-			IF_stop = 0;
-		}
 		else 
         {
 			IR = inst_mem[PC];    /* read instruction memory */
@@ -83,7 +95,6 @@ void IF_stage()
 		if (NPC == code_length) 
 			IF_continue = 0;
 	}
-
 	else if (IF_stop == 1) 
     {
 		IF_stop = 0;
@@ -99,17 +110,27 @@ void IF_stage()
 
 /*
  * Instruction Decode Stage
+ * 
+ * This stage is doing one big huge task and that is setting up values A and B 
+ * for the following stage (execution) If there is forwarding involved, many
+ * different conditionals need to be met in order to properly assign the right
+ * value to A. 
+ * 
+ * This stage will also check for branches and jumps too, making sure that both
+ * correctly flush out the following stage.
  */
 void ID_stage() 
 {
 	/* ------------------------------ ID stage ------------------------------ */
 	if (pipeline_one.valid == 1) 
     {
-        // all the forwarding cases
+        // all the forwarding cases //
+		// stalling first
 		if (((pipeline_two.IR.op == ADDI) || (pipeline_two.IR.op == SUBI)) && 
             ((pipeline_one.IR.op == BEQZ) || (pipeline_one.IR.op == BNEZ)) && 
             (pipeline_two.IR.rt == pipeline_one.IR.rs))
         {
+			// I-type stalling cases
 			IF_stop = 1;
 			IF_continue = 0;
 			pipeline_one.stop = 1;
@@ -120,53 +141,44 @@ void ID_stage()
 		        ((pipeline_one.IR.op == BEQZ) || (pipeline_one.IR.op == BNEZ)) && 
                 (pipeline_two.IR.rd == pipeline_one.IR.rs))
         {
+			// R-type stalling cases
 			IF_stop = 1;
 			IF_continue = 0;
 			pipeline_one.stop = 1;
 			pipeline_three.stall = 1;
 			pipeline_three.valid = 0;
 		}
-		else if (((pipeline_three.IR.op == ADDI) || (pipeline_three.IR.op == SUBI)) &&
+		else if ((((pipeline_three.IR.op == ADDI) || (pipeline_three.IR.op == SUBI)) &&
 		        ((pipeline_one.IR.op == BEQZ) || (pipeline_one.IR.op == BNEZ)) && 
                 (pipeline_three.IR.rt == pipeline_one.IR.rs))
-        {
-			A = pipeline_three.ALU_output;
-			ID_continue = 1;
-		}
-		else if (((pipeline_three.IR.op == ADD) || (pipeline_three.IR.op == SUB)) &&
+				||
+				(((pipeline_three.IR.op == ADD) || (pipeline_three.IR.op == SUB)) &&
 		        ((pipeline_one.IR.op == BEQZ) || (pipeline_one.IR.op == BNEZ)) && 
-                (pipeline_three.IR.rd == pipeline_one.IR.rs))
+                (pipeline_three.IR.rd == pipeline_one.IR.rs)))
         {
+			// forwarding for the A value from pipeline_three (EX->MEM)
 			A = pipeline_three.ALU_output;
-			ID_continue = 1;
+			ID_continue = 1;				/* Don't read A from registers */
 		}
-		else if (((pipeline_four.IR.op == ADDI) || (pipeline_four.IR.op == SUBI)) &&
+		else if ((((pipeline_four.IR.op == ADDI) || (pipeline_four.IR.op == SUBI)) &&
 		        ((pipeline_one.IR.op == BEQZ) || (pipeline_one.IR.op == BNEZ)) && 
                 (pipeline_four.IR.rt == pipeline_one.IR.rs))
-        {
-			A = pipeline_four.ALU_output;
-			ID_continue = 1;
-		}
-		else if (((pipeline_four.IR.op == ADD) || (pipeline_four.IR.op == SUB)) &&
+				||
+				(((pipeline_four.IR.op == ADD) || (pipeline_four.IR.op == SUB)) &&
 		        ((pipeline_one.IR.op == BEQZ) || (pipeline_one.IR.op == BNEZ)) && 
                 (pipeline_four.IR.rd == pipeline_one.IR.rs))
-        {
-			A = pipeline_four.ALU_output;
-			ID_continue = 1;
-		}
-		else if (((pipeline_four.IR.op == ADDI) || (pipeline_four.IR.op == SUBI)) &&
+				||
+				(((pipeline_four.IR.op == ADDI) || (pipeline_four.IR.op == SUBI)) &&
 		        ((pipeline_one.IR.op == ADDI) || (pipeline_one.IR.op == SUBI)) && 
                 (pipeline_four.IR.rt == pipeline_one.IR.rs))
-        {
-			A = pipeline_four.ALU_output;
-			ID_continue = 1;
-		}
-		else if (((pipeline_four.IR.op == ADD) || (pipeline_four.IR.op == SUB)) &&
+				||
+				(((pipeline_four.IR.op == ADD) || (pipeline_four.IR.op == SUB)) &&
 		        ((pipeline_one.IR.op == ADDI) || (pipeline_one.IR.op == SUBI)) && 
-                (pipeline_four.IR.rd == pipeline_one.IR.rs))
+                (pipeline_four.IR.rd == pipeline_one.IR.rs)))
         {
+			// forwarding for the A value from pipeline_four (MEM->WB)
 			A = pipeline_four.ALU_output;
-			ID_continue = 1;
+			ID_continue = 1;				/* Don't read A from registers */
 		}
 		
 		if (((pipeline_one.IR.op == BEQZ) || (pipeline_one.IR.op == BNEZ)) &&
@@ -174,6 +186,7 @@ void ID_stage()
             (pipeline_two.IR.rt == pipeline_one.IR.rs) && 
             (branch_LW_stop_one == 0))
         {
+			// branch is in pipeline_two arithmetic
 			IF_stop = 1;
 			IF_continue = 0;
 			pipeline_one.stop = 1;
@@ -186,6 +199,7 @@ void ID_stage()
                 (pipeline_three.IR.rt == pipeline_one.IR.rs) && 
                 (branch_LW_stop_two == 0))
         {
+			// branch is in pipeline_three arithmetic
 			IF_stop = 1;
 			IF_continue = 0;
 			pipeline_one.stop = 1;
@@ -194,41 +208,38 @@ void ID_stage()
 			branch_LW_stop_two = 1;
 		}
 
-        // more forwarding cases
-		if ((pipeline_one.IR.op == LW) && 
+        // more forwarding cases //
+		// checking cases with the LW instruction
+		if (((pipeline_one.IR.op == LW) && 
             ((pipeline_three.IR.op == ADD) || (pipeline_three.IR.op == SUB)) &&
 		    (pipeline_one.IR.rs == pipeline_three.IR.rd)) 
+			||
+			((pipeline_one.IR.op == LW) && 
+			((pipeline_three.IR.op == ADDI) || (pipeline_three.IR.op == SUBI)) &&
+			(pipeline_one.IR.rs == pipeline_three.IR.rt)))
         {
+			// forwarding for the A value from pipeline_three (EX->MEM)
 			A = pipeline_three.ALU_output;
-			ID_continue = 1;
+			ID_continue = 1;				/* Don't read A from registers */
 		}
-		else if ((pipeline_one.IR.op == LW) && 
-				((pipeline_three.IR.op == ADDI) || (pipeline_three.IR.op == SUBI)) &&
-				(pipeline_one.IR.rs == pipeline_three.IR.rt)) 
-		{
-			A = pipeline_three.ALU_output;
-			ID_continue = 1;
-		}
-		else if ((pipeline_one.IR.op == LW) && 
+		else if (((pipeline_one.IR.op == LW) && 
                 ((pipeline_four.IR.op == ADD) || (pipeline_four.IR.op == SUB)) &&
 		        (pipeline_one.IR.rs == pipeline_four.IR.rd)) 
-        {
-			A = pipeline_four.ALU_output;
-			ID_continue = 1;
-		}
-		else if ((pipeline_one.IR.op == LW) && 
+				||
+				((pipeline_one.IR.op == LW) && 
                 ((pipeline_four.IR.op == ADDI) || (pipeline_four.IR.op == SUBI)) &&
-		        (pipeline_one.IR.rs == pipeline_four.IR.rt)) 
+		        (pipeline_one.IR.rs == pipeline_four.IR.rt)))
         {
+			// forwarding for the A value from pipeline_four (MEM->WB)
 			A = pipeline_four.ALU_output;
-			ID_continue = 1;
+			ID_continue = 1;				/* Don't read A from registers */
 		}
 		
 		if (ID_continue == 0)
 			A = int_regs[pipeline_one.IR.rs]; /* read registers */	
 		
 		ID_continue = 0;
-		B = int_regs[pipeline_one.IR.rt];
+		B = int_regs[pipeline_one.IR.rt];	/* B is always from registers */
 
 		/* 
          * Calculate branch condition codes
@@ -243,7 +254,7 @@ void ID_stage()
 		else
 			Cond = 0;                           /* condition is 0 for all other instructions */
 
-		// if there's a jump meant to happen and the stage isn't being held
+		// if there's a jump
 		if ((Cond == 1) && 
             (pipeline_one.stop == 0)) 
         {             
@@ -251,9 +262,7 @@ void ID_stage()
 			PC = NPC;
 			IF_stall = 1;
 		}
-
-		//  if the stage isnt being held, allow the ex stage to run
-		if (pipeline_one.stop == 0)
+		else if (pipeline_one.stop == 0)
 			pipeline_two.valid = 1;
 		
 		// set up the EX stage
@@ -295,6 +304,12 @@ void ID_stage()
 
 /*
  * Execution Stage
+ * 
+ * This stage is executing the values of A and B in the ALU. However, by doing this,
+ * a lot of this stage's job is to set up all of the pipelines correctly. 
+ * 
+ * This stage is also making sure that the processory may need to stall because of a LW. 
+ * This is why there is a EX_LW_stop variable.
  */
 void EX_stage() 
 {
@@ -304,6 +319,7 @@ void EX_stage()
 		if ((pipeline_three.IR.op == ADD || pipeline_three.IR.op == SUB) && 
             (pipeline_three.IR.rd != 0)) 
         {
+			// R-type checking
 			if (pipeline_two.IR.rs == pipeline_three.IR.rd)
 				pipeline_two.A = pipeline_three.ALU_output;
 
@@ -313,6 +329,7 @@ void EX_stage()
 		else if ((pipeline_three.IR.op == ADDI || pipeline_three.IR.op == SUBI) &&
                 (pipeline_three.IR.rd != 0)) 
         {
+			// I-type checking
 			if (pipeline_two.IR.rs == pipeline_three.IR.rt) 
 				pipeline_two.A = pipeline_three.ALU_output;
 
@@ -323,6 +340,7 @@ void EX_stage()
 		if ((pipeline_three.IR.op == LW) && 
             ((pipeline_two.IR.op == ADD) || (pipeline_two.IR.op == SUB))) 
         {
+			// R-type checking pipeline_two for both rt and rs
 			if ((pipeline_two.IR.rt == pipeline_three.IR.rt) ||
 			    (pipeline_two.IR.rs == pipeline_three.IR.rt))
             {
@@ -338,6 +356,7 @@ void EX_stage()
 		else if ((pipeline_three.IR.op == LW) && 
                 ((pipeline_two.IR.op == ADDI) || (pipeline_two.IR.op == SUBI))) 
         {
+			// I-type checking pipeline_two just for rs
 			if (pipeline_two.IR.rs == pipeline_three.IR.rt)
             {
 				pipeline_three.valid = 0;
@@ -349,9 +368,12 @@ void EX_stage()
 				EX_LW_stop = 1;
 			}
 		}
-		else if ((pipeline_four.IR.op == LW) && 
+		
+		// LW conditionals
+		if ((pipeline_four.IR.op == LW) && 
                 ((pipeline_two.IR.op == ADD) || (pipeline_two.IR.op == SUB))) 
         {
+			// LW in pipeline_four and R-type in pipeline_two
 			if (pipeline_two.IR.rt == pipeline_four.IR.rt)
 				pipeline_two.A = pipeline_four.load_memory_data;
 			else if (pipeline_two.IR.rs == pipeline_four.IR.rt)
@@ -360,15 +382,17 @@ void EX_stage()
 		else if ((pipeline_four.IR.op == LW) && 
                 ((pipeline_two.IR.op == ADDI) || (pipeline_two.IR.op == SUBI))) 
         {
+			// LW in pipeline_four and I-type in pipeline_two
 			if (pipeline_two.IR.rs == pipeline_four.IR.rt)
 				pipeline_two.A = pipeline_four.load_memory_data;
 		}		
 		
-		//
+		// SW conditionals (does not work with Load Memory Data)
 		if ((pipeline_two.IR.op == SW) && 
             (pipeline_four.IR.rd != 0) && 
 		    ((pipeline_four.IR.op == ADD) || (pipeline_four.IR.op == SUB))) 
         {
+			// SW in pipeline_two and R-type in pipeline_four
 			if (pipeline_two.IR.rt == pipeline_four.IR.rs)
 				pipeline_two.B = int_regs[pipeline_four.IR.rs];
 			else if (pipeline_two.IR.rt == pipeline_four.IR.rt)
@@ -378,6 +402,7 @@ void EX_stage()
                 (pipeline_four.IR.rd != 0) && 
 		        ((pipeline_four.IR.op == ADDI) || (pipeline_four.IR.op == SUBI))) 
         {
+			// LW in pipeline_two and I-type in pipeline_four
 			if (pipeline_two.IR.rt == pipeline_four.IR.rs)
 				pipeline_two.B = int_regs[pipeline_four.IR.rs];
 		}
@@ -427,6 +452,14 @@ void EX_stage()
 
 /*
  * Memory Access Stage
+ * 
+ * This stage is getting all of registers back into memory. 
+ * 
+ * While checking to make sure this stage runs, it firsts check to see if the 
+ * LW and SW mem_addr is within bounds.
+ * 
+ * After that, it executes the LW or SW and checks the program counter to see if 
+ * it needs to continue or not.
  */
 void MEM_stage() 
 {
@@ -478,6 +511,13 @@ void MEM_stage()
 
 /*
  * Writeback Stage
+ * 
+ * This stage writes back data to the registers so that they are up to date
+ * for the next instruction. A lot of data forwarding does this earlier in the 
+ * other stages, but this one will do all of the rest as necessary.
+ * 
+ * This stage also checks to make sure that r0 was not overwrittern. For, if it
+ * was, it would throw an error and halt the processor.
  */
 void WB_stage() 
 {
