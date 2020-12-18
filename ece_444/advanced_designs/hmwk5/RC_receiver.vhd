@@ -5,33 +5,27 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 entity RC_receiver is
-	generic 
-	(
-		-- number of clocks for the leader code-on signal (assuming 50MHz clock)
-		LC_on_max	: integer := 450000
-	);
-	port 
-	(
-		-- outputs to the 8 7-segement displays.  The remote control
-		-- outputs 32 bits of binary data (each byte displayed as
-		-- 2 7-segment displays)
-		HEX7		: out std_logic_vector(6 downto 0);
-		HEX6		: out std_logic_vector(6 downto 0);
-		HEX5		: out std_logic_vector(6 downto 0);
-		HEX4		: out std_logic_vector(6 downto 0);
-		HEX3		: out std_logic_vector(6 downto 0);
-		HEX2		: out std_logic_vector(6 downto 0);
-		HEX1		: out std_logic_vector(6 downto 0);
-		HEX0		: out std_logic_vector(6 downto 0);
-
-		-- output to display when receiver is receiving data
-		rd_data		: out std_logic;
-
-		-- clock, data input, and system reset
-		clk			: in std_logic;
-		data_in		: in std_logic;
-		reset		: in std_logic
-	);
+generic (
+	-- number of clocks for the leader code-on signal (assuming 50MHz clock)
+	LC_on_max					: integer := 450000);
+port (
+	-- outputs to the 8 7-segement displays.  The remote control
+	-- outputs 32 bits of binary data (each byte displayed as
+	-- 2 7-segment displays)
+	HEX7						: out std_logic_vector(6 downto 0);
+	HEX6						: out std_logic_vector(6 downto 0);
+	HEX5						: out std_logic_vector(6 downto 0);
+	HEX4						: out std_logic_vector(6 downto 0);
+	HEX3						: out std_logic_vector(6 downto 0);
+	HEX2						: out std_logic_vector(6 downto 0);
+	HEX1						: out std_logic_vector(6 downto 0);
+	HEX0						: out std_logic_vector(6 downto 0);
+	-- output to display when receiver is receiving data
+	rd_data						: out std_logic;
+	-- clock, data input, and system reset
+	clk							: in std_logic;
+	data_in						: in std_logic;
+	reset						: in std_logic);
 end RC_receiver;
 
 architecture behavior of RC_receiver is
@@ -40,53 +34,42 @@ architecture behavior of RC_receiver is
 -- leader code off duration
 -- lengths of symbols '1' and '0'
 -- length of transition time (padding)
-constant LC_off_max		: integer := LC_on_max/2;
-constant one_clocks		: integer := LC_on_max/4;
-constant zero_clocks	: integer := LC_on_max/8;
-constant padding		: integer := LC_on_max/50; -- 2% of max
+constant LC_off_max				: integer := LC_on_max/2;
+constant one_clocks				: integer := LC_on_max/4;
+constant zero_clocks			: integer := LC_on_max/8;
+constant padding				: integer := LC_on_max/50; -- 2% of max
 ------------------------------------------------------------------------
-constant max_bits		: integer := 32;
+constant max_bits				: integer := 32;
 
 -- counter for measuring the duration of the leader code-on signal
-signal reading_LC_on	: std_logic := '0';
-signal LC_on_counter	: integer range 0 to LC_on_max+padding;
+signal reading_LC_on			: std_logic := '0';
+signal LC_on_counter			: integer range 0 to LC_on_max+padding;
 -- counter for measuring the duration of the leader code-off signal
-signal reading_LC_off	: std_logic := '0';
-signal LC_off_counter	: integer range 0 to LC_off_max+padding;
+signal reading_LC_off			: std_logic := '0';
+signal LC_off_counter			: integer range 0 to LC_off_max+padding;
 -- counter for measuring the duration of the data signal
-signal reading_data		: std_logic := '0';
-signal clock_counter	: integer range 0 to one_clocks+padding;
-signal checking_data	: std_logic := '0';
+signal reading_data				: std_logic := '0';
+signal clock_counter			: integer range 0 to one_clocks+padding;
+signal checking_data			: std_logic := '0';
 -- signal which determine the bit that is communicated
-signal data_bit			: std_logic := '0';
+signal data_bit					: std_logic := '0';
 -- counter to keep track of the number of bits transmitted
-signal data_counter		: integer range 0 to max_bits;
+signal data_counter				: integer range 0 to max_bits;
 -- signals for edge detection circuitry
-signal data				: std_logic;
-signal data_lead 		: std_logic;
-signal data_follow 		: std_logic;
-signal posedge			: std_logic;
+signal data						: std_logic;
+signal data_lead, data_follow 	: std_logic;
+signal posedge					: std_logic;
 -- shift register which holds the transmitted bits
-signal shift_reg		: std_logic_vector(max_bits-1 downto 0) := (others => '0');
+signal shift_reg				: std_logic_vector(max_bits-1 downto 0) := (others => '0');
 
 -- state machine signals
-type state_type is (
-	init, 
-	read_LC_on, 
-	check_LC_on_count, 
-	read_LC_off, 
-	check_LC_off_count, 
-	read_data, 
-	check_data);
-signal state, nxt_state	: state_type;
-
+type state_type is(init, read_LC_on, check_LC_on_count, read_LC_off, 
+	check_LC_off_count, read_data, check_data);
+signal state, nxt_state			: state_type;
 -- 7 segement display circuitry
 component hex_to_7_seg is
-	port 
-	(
-		seven_seg	: out std_logic_vector(6 downto 0);
-		hex			: in std_logic_vector(3 downto 0)
-	);
+port (seven_seg					: out std_logic_vector(6 downto 0);
+		hex						: in std_logic_vector(3 downto 0));
 end component;
 
 begin	
@@ -106,6 +89,7 @@ begin
 	rd_data <= reading_data;
 	
 	-- two process state machine
+
 	state_proc : process(clk) 
 	begin
 		-- the state machine should move to the "nxt_state" on the positive 
@@ -118,15 +102,14 @@ begin
 			end if;
 		end if;
 	end process state_proc;
+
 		
-	nxt_state_proc : process(
-		state, 
-		LC_on_counter, 
-		LC_off_counter, 
-		clock_counter, 
-		data_counter, 
-		data, 
-		posedge)
+	nxt_state_proc : process(state, LC_on_counter, LC_off_counter, clock_counter, 
+		data_counter, data, posedge)
+	
+	
+	
+	
 		-- define the state machine process here.  Use slide #6 on the assignment
 		-- powerpoint as a guide.  This process should also set control signals:
 		--	reading_LC_on
@@ -135,6 +118,7 @@ begin
 		--	checking_data
 		-- I also use this process to define signal:
 		--	data_bit
+		
 		begin
 
 		nxt_state <= state;	
@@ -156,6 +140,7 @@ begin
 					nxt_state <= read_LC_on;
 				end if;
 			when check_LC_on_count =>
+				-- if LC_on counter "in range"
 				if ((LC_on_counter > LC_on_max - padding -1) AND (LC_on_counter < LC_on_max + padding - 1)) then
 					nxt_state <= read_LC_off;
 				else
@@ -169,6 +154,7 @@ begin
 					nxt_state <= read_LC_off;
 				end if;
 			when check_LC_off_count =>
+				-- if LC_off counter "in range"
 				if ((LC_off_counter > LC_off_max - padding ) AND (LC_off_counter < LC_off_max + padding )) then
 					nxt_state <= read_data;
 				else
@@ -199,14 +185,17 @@ begin
 		end case;
 	end process nxt_state_proc;
 	
+		
+		
+		
+	
 	-- process to detect positive edge
+	
 	posedge <= data_lead and not data_follow;
 	pos_edge_proc : process(clk)
 	begin
-		-- use this process to determine the positive edge of the
-		-- input data signal, data_in
-		if (rising_edge(clk)) then
-			if (reset = '0') then
+		if(rising_edge(clk)) then
+			if(reset = '0') then
 				data_lead <= '0';
 				data_follow <= '0';
 			else
@@ -215,17 +204,21 @@ begin
 			end if;
 		end if;
 	end process pos_edge_proc;
-
+		
+			
+		-- use this process to determine the positive edge of the
+		-- input data signal, data_in
+	
 	-- counter for the leader code (ones)
 	LC_on_proc : process(clk)
 	begin
 		if(rising_edge(clk)) then 
-			if ((reset = '0') or (LC_on_counter = LC_on_max+padding)) then 
+			if (( reset = '0') or ( LC_on_counter = LC_on_max + padding)) then 
 				LC_on_counter <= 0;
 			elsif (reading_LC_on = '1') then 
 				LC_on_counter <= LC_on_counter + 1;
-			end if;
 		end if;
+	end if;
 	end process LC_on_proc;
 			
 		
@@ -233,11 +226,11 @@ begin
 	LC_off_proc : process(clk)
 	begin
 		if(rising_edge(clk)) then 
-			if ((reset = '0') or (LC_off_counter = LC_off_max+padding)) then 
+			if (( reset = '0') or ( LC_off_counter = LC_off_max + padding)) then 
 				LC_off_counter <= 0;
 			elsif (reading_LC_off = '1') then 
 				LC_off_counter <= LC_off_counter + 1;
-			end if;
+		end if;
 		end if;
 	end process LC_off_proc;
 	
@@ -246,35 +239,41 @@ begin
 	-- couner to count the number of clocks per data bit
 	clock_counter_proc : process(clk)
 	begin
-		if (rising_edge(clk)) then 
-			if ((reset = '0') or (clock_counter = one_clocks+padding) or (checking_data = '1')) then 
+		if(rising_edge(clk)) then 
+			if (( reset = '0') or ( clock_counter = one_clocks+padding) or (checking_data = '1')) then 
 				clock_counter <= 0;
 			elsif (reading_data = '1') then 
 				clock_counter <= clock_counter + 1;
-			end if;
+		end if;
 		end if;
 	end process clock_counter_proc;
-
+	
+	
 	-- counter to counter the number of data bits
 	data_counter_proc : process(clk)
-	begin
-		if (rising_edge(clk)) then 
-			if ((reset = '0') or (data_counter = max_bits-1+padding)) then 
+		begin
+		if(rising_edge(clk)) then 
+			if (( reset = '0') or ( data_counter = max_bits-1 + padding)) then 
 				data_counter <= 0;
 			elsif (checking_data = '1') then 
 				data_counter <= data_counter + 1;
-			end if;
+		end if;
 		end if;
 	end process data_counter_proc;
 	
+	
+	
+	
+	
+
 	shift_reg_proc : process(clk)
 	begin
 		if(rising_edge(clk)) then 
-			if (reset = '0') then 
+			if(reset = '0') then 
 				shift_reg <= (others => '0');
-			elsif (checking_data = '1') then 
+			elsif(checking_data = '1') then 
 				shift_reg <= data_bit & shift_reg(31 downto 1);
-			end if;
-		end if;
+	end if;
+	end if;
 	end process shift_reg_proc;
 end behavior;	
