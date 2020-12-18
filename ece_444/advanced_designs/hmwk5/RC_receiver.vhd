@@ -62,7 +62,7 @@ signal data_counter		: integer range 0 to max_bits;
 -- signals for edge detection circuitry
 signal data				: std_logic;
 signal data_lead		: std_logic;
-data_follow 			: std_logic;
+signal data_follow		: std_logic;
 signal posedge			: std_logic;
 -- shift register which holds the transmitted bits
 signal shift_reg		: std_logic_vector(max_bits-1 downto 0) := (others => '0');
