@@ -202,8 +202,8 @@ begin
 		-- input data signal, data_in
 		if (rising_edge(clk)) then
 			if (reset = '0') then
-				data_lead <= (others => '0');
-				data_follow <= (others => '0');
+				data_lead <= '0';
+				data_follow <= '0';
 			else
 				data_lead <= data;
 				data_follow <= data_lead;
@@ -282,7 +282,7 @@ begin
 		if (rising_edge(clk)) then
 			if (reset = '0') then
 				shift_reg <= (others => '0');
-			elsif (read_bit = '1') then
+			elsif (reading_data = '1') then
 				shift_reg <= data & shift_reg(max_bits-1 downto 1);
 			end if;
 		end if;
