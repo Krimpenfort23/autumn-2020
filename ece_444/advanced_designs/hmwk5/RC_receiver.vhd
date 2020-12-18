@@ -1,5 +1,7 @@
 -- RC_receiver
 -- implement a data receiver for the DE2 remote control
+-- Author: Eric Balster
+-- Editor: Evan Krimpenfort
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
@@ -62,7 +64,11 @@ signal data_counter		: integer range 0 to max_bits;
 -- signals for edge detection circuitry
 signal data				: std_logic;
 signal data_lead		: std_logic;
+<<<<<<< HEAD
 signal data_follow		: std_logic;
+=======
+signal data_follow 			: std_logic;
+>>>>>>> 82e03bd6f3d19fde92db317b0a33f4a1e9c3076a
 signal posedge			: std_logic;
 -- shift register which holds the transmitted bits
 signal shift_reg		: std_logic_vector(max_bits-1 downto 0) := (others => '0');
@@ -139,7 +145,6 @@ begin
 					nxt_state <= read_LC_on;
 				end if;
 			when check_LC_on_count =>
-				-- if LC_on counter "in range"
 				if ((LC_on_counter > LC_on_max - padding - 1) and (LC_on_counter < LC_on_max + padding - 1)) then
 					nxt_state <= read_LC_off;
 				else
@@ -153,7 +158,6 @@ begin
 					nxt_state <= read_LC_off;
 				end if;
 			when check_LC_off_count =>
-				-- if LC_off counter "in range"
 				if ((LC_off_counter > LC_off_max - padding) and (LC_off_counter < LC_off_max + padding)) then
 					nxt_state <= read_data;
 				else

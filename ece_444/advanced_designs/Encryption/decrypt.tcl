@@ -3,13 +3,13 @@ transcript off
 quit -sim	
 
 # select a directory for creation of the work directory
-cd {C:\_Eric\UD\Teaching\ECE501\Designs\Advanced_Designs\Encryption}
+cd {C:\Users\User\Documents\College\Senior Year\autumn-2020\ece_444\advanced_designs\Encryption}
 vlib work
 vmap work work
 
 # compile the program and test-bench files
-vcom ../../Sequential_Logic/sim_mem_init/sim_mem_init.vhd
-vcom decrypt-students.vhd
+vcom sim_mem_init.vhd
+vcom decrypt.vhd
 vcom test_decrypt.vhd
 
 # initializing the simulation window and adding waves to the simulation window
