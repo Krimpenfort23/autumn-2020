@@ -21,9 +21,9 @@ VPRLHM<WC<W0_Yb2hW]GJ82
 !s100 _zkL;=J?SNAI0fX:l96za1
 Z6 OV;C;10.4b;61
 32
-Z7 !s110 1608255658
+Z7 !s110 1608256121
 !i10b 1
-Z8 !s108 1608255658.000000
+Z8 !s108 1608256121.000000
 Z9 !s90 -reportprogress|300|hex_to_7_seg.vhd|
 Z10 !s107 hex_to_7_seg.vhd|
 !i113 1
@@ -51,8 +51,8 @@ Z13 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
 R2
 R3
 R0
-Z14 8RC_receiver_students.vhd
-Z15 FRC_receiver_students.vhd
+Z14 8RC_receiver.vhd
+Z15 FRC_receiver.vhd
 l0
 L7
 VLESJ84TVV@EZ=`?TT0^`o2
@@ -62,8 +62,8 @@ R6
 R7
 !i10b 1
 R8
-Z16 !s90 -reportprogress|300|RC_receiver_students.vhd|
-Z17 !s107 RC_receiver_students.vhd|
+Z16 !s90 -reportprogress|300|RC_receiver.vhd|
+Z17 !s107 RC_receiver.vhd|
 !i113 1
 R11
 Abehavior
@@ -82,5 +82,91 @@ R7
 R8
 R16
 R17
+!i113 1
+R11
+Psim_mem_init
+Z18 DPx4 ieee 16 std_logic_textio 0 22 V5TSK`;aJKC<l]CEg1>mz1
+R13
+R2
+R3
+Z19 w1608255881
+R0
+Z20 8sim_mem_init.vhd
+Z21 Fsim_mem_init.vhd
+l0
+L11
+Vh^VM6?MLGX:7lZKFS0lN72
+!s100 4:0L5Y8fgRoaAco03M<PJ2
+R6
+32
+b1
+R7
+!i10b 1
+R8
+Z22 !s90 -reportprogress|300|sim_mem_init.vhd|
+Z23 !s107 sim_mem_init.vhd|
+!i113 1
+R11
+Bbody
+Z24 DPx4 work 12 sim_mem_init 0 22 h^VM6?MLGX:7lZKFS0lN72
+R18
+R13
+R2
+R3
+l0
+L24
+VTjHEkoL><:1@c85iWZR]_3
+!s100 CI6TmhJYZNQ:JEJ2e9hhR1
+R6
+32
+R7
+!i10b 1
+R8
+R22
+R23
+!i113 1
+R11
+nbody
+Etest_rc_receiver
+Z25 w1608256059
+R24
+R18
+R13
+R2
+R3
+R0
+Z26 8test_RC_receiver.vhd
+Z27 Ftest_RC_receiver.vhd
+l0
+L9
+V8FiDnD8aNA1O=oUG415Hb2
+!s100 Q[0Ll>k1J6K5dR65XJP^k0
+R6
+32
+R7
+!i10b 1
+R8
+Z28 !s90 -reportprogress|300|test_RC_receiver.vhd|
+Z29 !s107 test_RC_receiver.vhd|
+!i113 1
+R11
+Atest
+R24
+R18
+R13
+R2
+R3
+Z30 DEx4 work 16 test_rc_receiver 0 22 8FiDnD8aNA1O=oUG415Hb2
+l50
+L12
+VDi^LD`0>Pzg>3ZSd8SlRd0
+!s100 H2Ic>H4iQkF1lc0JP00i:1
+R6
+32
+R7
+!i10b 1
+R8
+R28
+R29
 !i113 1
 R11
