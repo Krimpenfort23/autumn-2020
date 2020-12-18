@@ -142,7 +142,6 @@ begin
 		reading_LC_off <= '0';
 		reading_data <= '0';
 		checking_data <= '0';
-		data_bit <= '0';
 
 		case state is
 			when init =>
@@ -157,9 +156,9 @@ begin
 					nxt_state <= state;
 				end if;
 			when check_LC_on_count =>
-				if (LC_on_counter < LC_on_max+padding) then
+				if ((LC_on_counter > LC_on_max-padding-1) AND (LC_on_counter < LC_on_max+padding-1)) then
 					nxt_state <= read_LC_off;
-				elsif (LC_on_counter >= LC_on_max+padding) then
+				else
 					nxt_state <= init;
 				end if;
 			when read_LC_off =>
@@ -170,9 +169,9 @@ begin
 					nxt_state <= state;
 				end if;
 			when check_LC_off_count =>
-				if (LC_off_counter < LC_off_max+padding) then
+				if ((LC_off_counter > LC_off_max-padding) AND (LC_off_counter < LC_off_max+padding)) then
 					nxt_state <= read_data;
-				elsif (LC_off_counter >= LC_off_max+padding) then
+				else
 					nxt_state <= init;
 				end if;
 			when read_data =>
@@ -184,10 +183,18 @@ begin
 				end if;
 			when check_data =>
 				checking_data <= '1';
+				-- data counter state stuff
 				if (data_counter = max_bits-1) then
 					nxt_state <= init;
-				elsif (data_counter /= max_bits-1) then
+				else
 					nxt_state <= read_data;
+				end if;
+
+				-- data bit math
+				if clock_counter > one_clocks-padding then 
+					data_bit <= '1';
+				elsif clock_counter < zero_clocks+padding then 
+					data_bit <= '0';
 				end if;
 			when others =>
 				nxt_state <= state;
@@ -195,7 +202,7 @@ begin
 	end process nxt_state_proc;
 	
 	-- process to detect positive edge
-	posedge <= data_follow and not data_lead;
+	posedge <= data_lead and not data_follow;
 	pos_edge_proc : process(clk)
 	begin
 		-- use this process to determine the positive edge of the
@@ -249,7 +256,7 @@ begin
 		-- process to count the number of clocks during the "data",
 		-- or payload, portion of the data sequence
 		if (rising_edge(clk)) then
-			if ((reset = '0') or (clock_counter = one_clocks+padding)) then
+			if ((reset = '0') or (clock_counter = one_clocks+padding) or (checking_data = '1')) then
 				clock_counter <= 0;
 			elsif (reading_data = '1') then
 				clock_counter <= clock_counter + 1;
@@ -265,7 +272,7 @@ begin
 		-- process to determine the number of data bits counted in the
 		-- payload
 		if (rising_edge(clk)) then
-			if ((reset = '0') or (data_counter = max_bits-1)) then
+			if ((reset = '0') or (data_counter = max_bits-1+padding)) then
 				data_counter <= 0;
 			elsif (checking_data = '1') then
 				data_counter <= data_counter + 1;
@@ -283,7 +290,7 @@ begin
 			if (reset = '0') then
 				shift_reg <= (others => '0');
 			elsif (reading_data = '1') then
-				shift_reg <= data & shift_reg(max_bits-1 downto 1);
+				shift_reg <= data_bit & shift_reg(max_bits-1 downto 1);
 			end if;
 		end if;
 	end process shift_reg_proc;
