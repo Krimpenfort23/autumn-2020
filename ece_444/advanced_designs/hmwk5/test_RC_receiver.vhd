@@ -1,9 +1,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
-use std.textio.all ;
-use ieee.std_logic_textio.all ;
-
+use std.textio.all;
+use ieee.std_logic_textio.all;
 use work.sim_mem_init.all;
 
 entity test_RC_receiver is
@@ -12,23 +11,27 @@ end;
 architecture test of test_RC_receiver is
   
 component RC_receiver
-generic (
-	LC_on_max 					: integer := 450000);
-port (	
-	HEX7						: out std_logic_vector(6 downto 0);
-	HEX6						: out std_logic_vector(6 downto 0);
-	HEX5						: out std_logic_vector(6 downto 0);
-	HEX4						: out std_logic_vector(6 downto 0);
-	HEX3						: out std_logic_vector(6 downto 0);
-	HEX2						: out std_logic_vector(6 downto 0);
-	HEX1						: out std_logic_vector(6 downto 0);
-	HEX0						: out std_logic_vector(6 downto 0);
-		
-	rd_data						: out std_logic;
+	generic 
+	(
+		LC_on_max 					: integer := 450000
+	);
+	port 
+	(	
+		HEX7						: out std_logic_vector(6 downto 0);
+		HEX6						: out std_logic_vector(6 downto 0);
+		HEX5						: out std_logic_vector(6 downto 0);
+		HEX4						: out std_logic_vector(6 downto 0);
+		HEX3						: out std_logic_vector(6 downto 0);
+		HEX2						: out std_logic_vector(6 downto 0);
+		HEX1						: out std_logic_vector(6 downto 0);
+		HEX0						: out std_logic_vector(6 downto 0);
 			
-	clk							: in std_logic;
-	data_in						: in std_logic;
-	reset						: in std_logic);
+		rd_data						: out std_logic;
+				
+		clk							: in std_logic;
+		data_in						: in std_logic;
+		reset						: in std_logic
+	);
 end component;
 
 constant LC_on_max 				: integer := 50;
