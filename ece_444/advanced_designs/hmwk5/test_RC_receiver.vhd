@@ -49,7 +49,7 @@ file input_file,output_file 	: text;
 
 begin
 	n_data <= not data_in; -- data comes into the FPGA inverted
-	dev_to_test:  RC_receiver
+	dev_to_test:  RC_receiver 
 		generic map(LC_on_max)
 		port map(seg(7), seg(6), seg(5), seg(4), seg(3), seg(2), seg(1), seg(0),
 				rd_data, clk, n_data, reset); 

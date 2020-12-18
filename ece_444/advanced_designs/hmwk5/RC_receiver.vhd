@@ -5,27 +5,31 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 entity RC_receiver is
-generic (
-	-- number of clocks for the leader code-on signal (assuming 50MHz clock)
-	LC_on_max					: integer := 450000);
-port (
-	-- outputs to the 8 7-segement displays.  The remote control
-	-- outputs 32 bits of binary data (each byte displayed as
-	-- 2 7-segment displays)
-	HEX7						: out std_logic_vector(6 downto 0);
-	HEX6						: out std_logic_vector(6 downto 0);
-	HEX5						: out std_logic_vector(6 downto 0);
-	HEX4						: out std_logic_vector(6 downto 0);
-	HEX3						: out std_logic_vector(6 downto 0);
-	HEX2						: out std_logic_vector(6 downto 0);
-	HEX1						: out std_logic_vector(6 downto 0);
-	HEX0						: out std_logic_vector(6 downto 0);
-	-- output to display when receiver is receiving data
-	rd_data						: out std_logic;
-	-- clock, data input, and system reset
-	clk							: in std_logic;
-	data_in						: in std_logic;
-	reset						: in std_logic);
+	generic 
+	(
+		-- number of clocks for the leader code-on signal (assuming 50MHz clock)
+		LC_on_max					: integer := 450000
+	);
+	port 
+	(
+		-- outputs to the 8 7-segement displays.  The remote control
+		-- outputs 32 bits of binary data (each byte displayed as
+		-- 2 7-segment displays)
+		HEX7						: out std_logic_vector(6 downto 0);
+		HEX6						: out std_logic_vector(6 downto 0);
+		HEX5						: out std_logic_vector(6 downto 0);
+		HEX4						: out std_logic_vector(6 downto 0);
+		HEX3						: out std_logic_vector(6 downto 0);
+		HEX2						: out std_logic_vector(6 downto 0);
+		HEX1						: out std_logic_vector(6 downto 0);
+		HEX0						: out std_logic_vector(6 downto 0);
+		-- output to display when receiver is receiving data
+		rd_data						: out std_logic;
+		-- clock, data input, and system reset
+		clk							: in std_logic;
+		data_in						: in std_logic;
+		reset						: in std_logic
+	);
 end RC_receiver;
 
 architecture behavior of RC_receiver is

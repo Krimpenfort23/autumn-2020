@@ -8,8 +8,6 @@ vlib work
 vmap work work
 
 # compile the program and test-bench files
-vcom sim_mem_init.vhd
-vcom hex_to_7_seg.vhd
 vcom RC_receiver.vhd
 vcom test_RC_receiver.vhd
 
