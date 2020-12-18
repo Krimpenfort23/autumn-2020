@@ -281,7 +281,7 @@ begin
 		if (rising_edge(clk)) then
 			if (reset = '0') then
 				shift_reg <= (others => '0');
-			elsif (reading_data = '1') then
+			elsif (checking_data = '1') then
 				shift_reg <= data_bit & shift_reg(max_bits-1 downto 1);
 			end if;
 		end if;
