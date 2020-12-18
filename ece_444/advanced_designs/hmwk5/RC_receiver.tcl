@@ -16,6 +16,6 @@ vsim test_RC_receiver
 add wave sim:/test_RC_receiver/dev_to_test/*
 
 # define simulation time
-run 5248210 ns
+run 8265 ns
 # zoom out
 wave zoom full
