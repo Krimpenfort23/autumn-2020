@@ -13,8 +13,8 @@ vcom vending_machine.vhd
 vcom test_vending_machine.vhd
 
 # initialize the simulation window and add waves to the simulation window
-vsim test_SMult
-add wave sim:/test_SMult/dev_to_test/*
+vsim test_vending_machine
+add wave sim:/test_vending_machine/dev_to_test/*
 
 # define simulation time
 run 1290 ns

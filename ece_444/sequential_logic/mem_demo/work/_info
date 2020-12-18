@@ -25,9 +25,9 @@ VgB5L3XHmzGkT`>>]AUJ8=1
 !s100 E7mNiPcFoN5JIW<X[_fA=0
 Z10 OV;C;10.4b;61
 32
-Z11 !s110 1608316708
+Z11 !s110 1608317051
 !i10b 1
-Z12 !s108 1608316708.000000
+Z12 !s108 1608317051.000000
 Z13 !s90 -reportprogress|300|memory_2.vhd|
 Z14 !s107 memory_2.vhd|
 !i113 1
@@ -69,11 +69,11 @@ Vh^VM6?MLGX:7lZKFS0lN72
 R10
 32
 b1
-Z19 !s110 1608316707
+R11
 !i10b 1
-Z20 !s108 1608316707.000000
-Z21 !s90 -reportprogress|300|sim_mem_init.vhd|
-Z22 !s107 sim_mem_init.vhd|
+R12
+Z19 !s90 -reportprogress|300|sim_mem_init.vhd|
+Z20 !s107 sim_mem_init.vhd|
 !i113 1
 R15
 Bbody
@@ -88,24 +88,24 @@ VTjHEkoL><:1@c85iWZR]_3
 !s100 CI6TmhJYZNQ:JEJ2e9hhR1
 R10
 32
-R19
+R11
 !i10b 1
+R12
+R19
 R20
-R21
-R22
 !i113 1
 R15
 nbody
 Etest_memory_2
-Z23 w1608316687
+Z21 w1608316687
 R2
 R4
 R5
 R6
 R7
 R0
-Z24 8test_memory_2.vhd
-Z25 Ftest_memory_2.vhd
+Z22 8test_memory_2.vhd
+Z23 Ftest_memory_2.vhd
 l0
 L8
 VWVam`>d^8TCk?l>aG:46T1
@@ -115,8 +115,8 @@ R10
 R11
 !i10b 1
 R12
-Z26 !s90 -reportprogress|300|test_memory_2.vhd|
-Z27 !s107 test_memory_2.vhd|
+Z24 !s90 -reportprogress|300|test_memory_2.vhd|
+Z25 !s107 test_memory_2.vhd|
 !i113 1
 R15
 Atest
@@ -125,17 +125,17 @@ R4
 R5
 R6
 R7
-Z28 DEx4 work 13 test_memory_2 0 22 WVam`>d^8TCk?l>aG:46T1
+Z26 DEx4 work 13 test_memory_2 0 22 WVam`>d^8TCk?l>aG:46T1
 l42
 L11
-Vf3@SI>P>c;4P^mY]nFB>g1
-!s100 A3SCg=:=FR>MeSoj>ABzM1
+Z27 Vf3@SI>P>c;4P^mY]nFB>g1
+Z28 !s100 A3SCg=:=FR>MeSoj>ABzM1
 R10
 32
 R11
 !i10b 1
 R12
-R26
-R27
+R24
+R25
 !i113 1
 R15

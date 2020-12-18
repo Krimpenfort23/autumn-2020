@@ -77,7 +77,7 @@ begin
                     nxt_state <= display_product;
                 end if;
             when display_product =>
-                product_state = '1';
+                product_state <= '1';
                 nxt_state <= display_dime;
             when display_quarter =>
                 if (money_in >= 25) then
@@ -98,7 +98,7 @@ begin
                     nxt_state <= rec_coin;
                 end if;
             when others =>
-                next_state <= rec_coin;
+                nxt_state <= rec_coin;
         end case;
     end process state_machine; -- state_machine
 
