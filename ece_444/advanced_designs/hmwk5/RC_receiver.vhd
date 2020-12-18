@@ -60,7 +60,7 @@ signal checking_data	: std_logic := '0';
 -- signal which determine the bit that is communicated
 signal data_bit			: std_logic := '0';
 -- counter to keep track of the number of bits transmitted
-signal data_counter		: integer range 0 to max_bits-1;
+signal data_counter		: integer range 0 to max_bits;
 -- signals for edge detection circuitry
 signal data				: std_logic;
 signal data_lead 		: std_logic;
@@ -126,9 +126,7 @@ begin
 		clock_counter, 
 		data_counter, 
 		data, 
-		posedge
-	)
-	begin
+		posedge)
 		-- define the state machine process here.  Use slide #6 on the assignment
 		-- powerpoint as a guide.  This process should also set control signals:
 		--	reading_LC_on
@@ -137,60 +135,60 @@ begin
 		--	checking_data
 		-- I also use this process to define signal:
 		--	data_bit
-		nxt_state <= state;
-		reading_LC_on <= '0';
+		begin
+
+		nxt_state <= state;	
 		reading_LC_off <= '0';
+		reading_LC_on <= '0';
 		reading_data <= '0';
 		checking_data <= '0';
-
+		
 		case state is
-			when init =>
-				if (posedge = '1') then
+			when init => 
+				if posedge = '1' then
 					nxt_state <= read_LC_on;
 				end if;
 			when read_LC_on =>
 				reading_LC_on <= '1';
-				if (data = '0') then
+				if data <= '0' then 
 					nxt_state <= check_LC_on_count;
 				else
 					nxt_state <= read_LC_on;
 				end if;
 			when check_LC_on_count =>
-				if ((LC_on_counter > LC_on_max-padding-1) AND (LC_on_counter < LC_on_max+padding-1)) then
+				if ((LC_on_counter > LC_on_max - padding -1) AND (LC_on_counter < LC_on_max + padding - 1)) then
 					nxt_state <= read_LC_off;
 				else
 					nxt_state <= init;
 				end if;
 			when read_LC_off =>
 				reading_LC_off <= '1';
-				if (posedge = '1') then
+				if posedge = '1' then
 					nxt_state <= check_LC_off_count;
 				else
 					nxt_state <= read_LC_off;
 				end if;
 			when check_LC_off_count =>
-				if ((LC_off_counter > LC_off_max-padding) AND (LC_off_counter < LC_off_max+padding)) then
+				if ((LC_off_counter > LC_off_max - padding ) AND (LC_off_counter < LC_off_max + padding )) then
 					nxt_state <= read_data;
 				else
 					nxt_state <= init;
 				end if;
 			when read_data =>
 				reading_data <= '1';
-				if (posedge = '1') then
+				if posedge = '1' then
 					nxt_state <= check_data;
 				else
 					nxt_state <= read_data;
 				end if;
 			when check_data =>
 				checking_data <= '1';
-				-- data counter state stuff
-				if (data_counter = max_bits-1) then
+				if data_counter = max_bits-1 then
 					nxt_state <= init;
 				else
 					nxt_state <= read_data;
+				
 				end if;
-
-				-- data bit math
 				if clock_counter > one_clocks-padding then 
 					data_bit <= '1';
 				elsif clock_counter < zero_clocks+padding then 
