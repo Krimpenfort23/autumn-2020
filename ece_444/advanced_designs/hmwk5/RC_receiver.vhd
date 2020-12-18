@@ -153,7 +153,7 @@ begin
 				if (data = '0') then
 					nxt_state <= check_LC_on_count;
 				else
-					nxt_state <= state;
+					nxt_state <= read_LC_on;
 				end if;
 			when check_LC_on_count =>
 				if ((LC_on_counter > LC_on_max-padding-1) AND (LC_on_counter < LC_on_max+padding-1)) then
@@ -166,7 +166,7 @@ begin
 				if (posedge = '1') then
 					nxt_state <= check_LC_off_count;
 				else
-					nxt_state <= state;
+					nxt_state <= read_LC_off;
 				end if;
 			when check_LC_off_count =>
 				if ((LC_off_counter > LC_off_max-padding) AND (LC_off_counter < LC_off_max+padding)) then
@@ -179,7 +179,7 @@ begin
 				if (posedge = '1') then
 					nxt_state <= check_data;
 				else
-					nxt_state <= state;
+					nxt_state <= read_data;
 				end if;
 			when check_data =>
 				checking_data <= '1';
@@ -197,7 +197,7 @@ begin
 					data_bit <= '0';
 				end if;
 			when others =>
-				nxt_state <= state;
+				nxt_state <= init;
 		end case;
 	end process nxt_state_proc;
 	
@@ -228,8 +228,6 @@ begin
 				LC_on_counter <= 0;
 			elsif (reading_LC_on = '1') then
 				LC_on_counter <= LC_on_counter + 1;
-			else
-				LC_on_counter <= 0;
 			end if;
 		end if;
 	end process LC_on_proc;
@@ -244,8 +242,6 @@ begin
 				LC_off_counter <= 0;
 			elsif (reading_LC_off = '1') then
 				LC_off_counter <= LC_off_counter + 1;
-			else
-				LC_off_counter <= 0;
 			end if;
 		end if;
 	end process LC_off_proc;
@@ -260,8 +256,6 @@ begin
 				clock_counter <= 0;
 			elsif (reading_data = '1') then
 				clock_counter <= clock_counter + 1;
-			else
-				clock_counter <= 0;
 			end if;
 		end if;
 	end process clock_counter_proc;
@@ -276,8 +270,6 @@ begin
 				data_counter <= 0;
 			elsif (checking_data = '1') then
 				data_counter <= data_counter + 1;
-			else
-				data_counter <= 0;
 			end if;
 		end if;
 	end process data_counter_proc;
