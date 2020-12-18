@@ -2,8 +2,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 use ieee.math_real.all;
-
-use std_textio.all;
+use std.textio.all;
 use ieee.std_logic_textio.all;
 
 entity test_memory_2 is
@@ -16,7 +15,7 @@ component memory_2
     (
         addr_size   :   integer := 256;
         data_width  :   integer := 8;
-        filename    :   string := "temp.mif"
+        filename    :   string := "pi.mif"
     );
     port
     (
@@ -31,19 +30,19 @@ end component;
 
 constant addr_size  : integer := 256;
 constant data_width : integer := 8;
-constant filename   : string := "temp.mif";
+constant filename   : string := "pi.mif";
 
 signal data_in      : std_logic_vector(data_width-1 downto 0) := x"00";
 signal data_out     : std_logic_vector(data_width-1 downto 0);
 signal addr         : std_logic_vector(integer(ceil(log2(real(addr_size))))-1 downto 0);
 signal wr_addr      : std_logic_vector(integer(ceil(log2(real(addr_size))))-1 downto 0) := x"00";
 signal clk          : std_logic := '0';
-signal written      : std_logic := '0';
+signal writen      : std_logic := '0';
 
 begin
     dev_to_test : memory_2
         generic map(addr_size, data_width, filename)
-        port map(data_out, data_in, addr, wr_addr, written);
+        port map(data_out, data_in, addr, wr_addr, clk, writen);
 
     stimulus : process
     begin

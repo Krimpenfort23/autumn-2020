@@ -9,7 +9,7 @@ entity memory_2 is
     (
         addr_size   :   integer := 256;
         data_width  :   integer := 8;
-        filename    :   string := "temp.mif"
+        filename    :   string := "pi.mif"
     );
     port
     (
@@ -26,14 +26,14 @@ architecture behavior of memory_2 is
 
 signal Mem              : MemType(0 to addr_size-1) := init_quartus_mem_8bit(filename, addr_size-1);
 attribute ram_init_file : string;
-attribute ram_init_file : Mem : signal is filename;
+attribute ram_init_file of Mem : signal is filename;
 
 begin
     mem_process : process(clk)
     begin
         if (rising_edge(clk)) then
             if (write_en = '1') then
-                Mem(to_integer(unsigned(write_addr))) <= addr_in;
+                Mem(to_integer(unsigned(write_addr))) <= data_in;
             end if;
         end if;
     end process mem_process; -- mem_process
