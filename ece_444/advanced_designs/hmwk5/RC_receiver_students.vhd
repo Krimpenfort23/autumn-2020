@@ -110,6 +110,13 @@ begin
 	begin
 		-- the state machine should move to the "nxt_state" on the positive 
 		-- edge of the clock
+		if(rising_edge(clk)) then
+			if(reset = '0') then
+				state <= init;
+			else
+				state <= nxt_state;
+			end if;
+		end if;
 	end process state_proc;
 		
 	nxt_state_proc : process(
@@ -130,43 +137,154 @@ begin
 		--	checking_data
 		-- I also use this process to define signal:
 		--	data_bit
+		nxt_state <= state;
+		reading_LC_on <= '0';
+		reading_LC_off <= '0';
+		reading_data <= '0';
+		checking_data <= '0';
+		data_bit <= '0';
+
+		case state is
+			when init =>
+				if (posedge = '1') then
+					nxt_state <= read_LC_on;
+				end if;
+			when read_LC_on =>
+				reading_LC_on <= '1';
+				if (data = '0') then
+					nxt_state <= check_LC_on_count;
+				else
+					nxt_state <= state;
+				end if;
+			when check_LC_on_count =>
+				if (LC_on_counter < LC_on_max+padding) then
+					nxt_state <= read_LC_off;
+				elsif (LC_on_counter >= LC_on_max+padding) then
+					nxt_state <= init;
+				end if;
+			when read_LC_off =>
+				reading_LC_off <= '1';
+				if (posedge = '1') then
+					nxt_state <= check_LC_off_count;
+				else
+					nxt_state <= state;
+				end if;
+			when check_LC_off_count =>
+				if (LC_off_counter < LC_off_max+padding) then
+					nxt_state <= read_data;
+				elsif (LC_off_counter >= LC_off_max+padding) then
+					nxt_state <= init;
+				end if;
+			when read_data =>
+				reading_data <= '1';
+				if (posedge = '1') then
+					nxt_state <= check_data;
+				else
+					nxt_state <= state;
+				end if;
+			when check_data =>
+				checking_data <= '1';
+				if (data_counter = max_bits-1) then
+					nxt_state <= init;
+				elsif (data_counter /= max_bits-1) then
+					nxt_state <= read_data;
+				end if;
+			when others =>
+				nxt_state <= state;
+		end case;
 	end process nxt_state_proc;
 	
 	-- process to detect positive edge
-	posedge <= ???;
+	posedge <= data_follow and not data_lead;
 	pos_edge_proc : process(clk)
 	begin
 		-- use this process to determine the positive edge of the
 		-- input data signal, data_in
+		if (rising_edge(clk)) then
+			if (reset = '0') then
+				data_lead <= (others => '0');
+				data_follow <= (others => '0');
+			else
+				data_lead <= data;
+				data_follow <= data_lead;
+			end if;
+		end if;
 	end process pos_edge_proc;
+
 	-- counter for the leader code (ones)
 	LC_on_proc : process(clk)
 	begin
 		-- process to count the number of clocks during the LC_on
 		-- portion of the incomming data sequence
+		if (rising_edge(clk)) then
+			if ((reset = '0') or (LC_on_counter = LC_on_max+padding)) then
+				LC_on_counter <= 0;
+			elsif (reading_LC_on = '1') then
+				LC_on_counter <= LC_on_counter + 1;
+			else
+				LC_on_counter <= 0;
+			end if;
+		end if;
 	end process LC_on_proc;
+
 	-- counter for the leader code (zeros)
 	LC_off_proc : process(clk)
 	begin
 		-- process to count the number of clocks during the LC_off
 		-- portion of the incomming data sequence
+		if (rising_edge(clk)) then
+			if ((reset = '0') or (LC_off_counter = LC_off_max+padding)) then
+				LC_off_counter <= 0;
+			elsif (reading_LC_off = '1') then
+				LC_off_counter <= LC_off_counter + 1;
+			else
+				LC_off_counter <= 0;
+			end if;
+		end if;
 	end process LC_off_proc;
-	-- couner to count the number of clocks per data bit
+
+	-- counter to count the number of clocks per data bit
 	clock_counter_proc : process(clk)
 	begin
 		-- process to count the number of clocks during the "data",
 		-- or payload, portion of the data sequence
+		if (rising_edge(clk)) then
+			if ((reset = '0') or (clock_counter = one_clocks+padding)) then
+				clock_counter <= 0;
+			elsif (reading_data = '1') then
+				clock_counter <= clock_counter + 1;
+			else
+				clock_counter <= 0;
+			end if;
+		end if;
 	end process clock_counter_proc;
+
 	-- counter to counter the number of data bits
 	data_counter_proc : process(clk)
 	begin
 		-- process to determine the number of data bits counted in the
 		-- payload
+		if (rising_edge(clk)) then
+			if ((reset = '0') or (data_counter = max_bits-1)) then
+				data_counter <= 0;
+			elsif (checking_data = '1') then
+				data_counter <= data_counter + 1;
+			else
+				data_counter <= 0;
+			end if;
+		end if;
 	end process data_counter_proc;
 	
 	shift_reg_proc : process(clk)
 	begin
 		-- process to define the shift register that holds the incomming
 		-- data.  (hint:  don't use canned VHDL functions for shifting)
+		if (rising_edge(clk)) then
+			if (reset = '0') then
+				shift_reg <= (others => '0');
+			elsif (read_bit = '1') then
+				shift_reg <= data & shift_reg(max_bits-1 downto 1);
+			end if;
+		end if;
 	end process shift_reg_proc;
 end behavior;	
