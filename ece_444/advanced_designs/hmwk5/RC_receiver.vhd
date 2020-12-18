@@ -221,40 +221,37 @@ begin
 	-- counter for the leader code (ones)
 	LC_on_proc : process(clk)
 	begin
-		-- process to count the number of clocks during the LC_on
-		-- portion of the incomming data sequence
-		if (rising_edge(clk)) then
-			if ((reset = '0') or (LC_on_counter = LC_on_max+padding)) then
+		if(rising_edge(clk)) then 
+			if ((reset = '0') or (LC_on_counter = LC_on_max+padding)) then 
 				LC_on_counter <= 0;
-			elsif (reading_LC_on = '1') then
+			elsif (reading_LC_on = '1') then 
 				LC_on_counter <= LC_on_counter + 1;
 			end if;
 		end if;
 	end process LC_on_proc;
-
+			
+		
 	-- counter for the leader code (zeros)
 	LC_off_proc : process(clk)
 	begin
-		-- process to count the number of clocks during the LC_off
-		-- portion of the incomming data sequence
-		if (rising_edge(clk)) then
-			if ((reset = '0') or (LC_off_counter = LC_off_max+padding)) then
+		if(rising_edge(clk)) then 
+			if ((reset = '0') or (LC_off_counter = LC_off_max+padding)) then 
 				LC_off_counter <= 0;
-			elsif (reading_LC_off = '1') then
+			elsif (reading_LC_off = '1') then 
 				LC_off_counter <= LC_off_counter + 1;
 			end if;
 		end if;
 	end process LC_off_proc;
-
-	-- counter to count the number of clocks per data bit
+	
+	
+	
+	-- couner to count the number of clocks per data bit
 	clock_counter_proc : process(clk)
 	begin
-		-- process to count the number of clocks during the "data",
-		-- or payload, portion of the data sequence
-		if (rising_edge(clk)) then
-			if ((reset = '0') or (clock_counter = one_clocks+padding) or (checking_data = '1')) then
+		if (rising_edge(clk)) then 
+			if ((reset = '0') or (clock_counter = one_clocks+padding) or (checking_data = '1')) then 
 				clock_counter <= 0;
-			elsif (reading_data = '1') then
+			elsif (reading_data = '1') then 
 				clock_counter <= clock_counter + 1;
 			end if;
 		end if;
@@ -263,12 +260,10 @@ begin
 	-- counter to counter the number of data bits
 	data_counter_proc : process(clk)
 	begin
-		-- process to determine the number of data bits counted in the
-		-- payload
-		if (rising_edge(clk)) then
-			if ((reset = '0') or (data_counter = max_bits-1+padding)) then
+		if (rising_edge(clk)) then 
+			if ((reset = '0') or (data_counter = max_bits-1+padding)) then 
 				data_counter <= 0;
-			elsif (checking_data = '1') then
+			elsif (checking_data = '1') then 
 				data_counter <= data_counter + 1;
 			end if;
 		end if;
@@ -276,13 +271,11 @@ begin
 	
 	shift_reg_proc : process(clk)
 	begin
-		-- process to define the shift register that holds the incomming
-		-- data.  (hint:  don't use canned VHDL functions for shifting)
-		if (rising_edge(clk)) then
-			if (reset = '0') then
+		if(rising_edge(clk)) then 
+			if (reset = '0') then 
 				shift_reg <= (others => '0');
-			elsif (checking_data = '1') then
-				shift_reg <= data_bit & shift_reg(max_bits-1 downto 1);
+			elsif (checking_data = '1') then 
+				shift_reg <= data_bit & shift_reg(31 downto 1);
 			end if;
 		end if;
 	end process shift_reg_proc;
